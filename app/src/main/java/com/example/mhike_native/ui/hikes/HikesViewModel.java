@@ -10,7 +10,7 @@ public class HikesViewModel extends ViewModel {
 
     public HikesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("This is all hikes fragment");
     }
 
     public LiveData<String> getText() {
