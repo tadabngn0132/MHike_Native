@@ -1,4 +1,4 @@
-package com.example.mhike_native.ui.dashboard;
+package com.example.mhike_native.ui.hikes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mhike_native.databinding.FragmentDashboardBinding;
 
-public class DashboardFragment extends Fragment {
+public class HikesFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        HikesViewModel dashboardViewModel =
+                new ViewModelProvider(this).get(HikesViewModel.class);
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

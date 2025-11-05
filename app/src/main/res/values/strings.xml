@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">MHike_Native</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_hikes">All Hikes</string>
+    <string name="title_add_hike">Add</string>
+
+    <string name="title_search">Search</string>
 
     // Added for Profile fragment
     <string name="title_profile">Profile</string>
