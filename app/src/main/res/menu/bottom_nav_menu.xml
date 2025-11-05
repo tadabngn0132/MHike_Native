@@ -8,18 +8,13 @@
 
     <item
         android:id="@+id/navigation_hikes"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
         android:title="@string/title_hikes" />
 
     <item
         android:id="@+id/navigation_add_hike"
-        android:icon="@drawable/ic_add_circle_black_24dp"
+        android:icon="@drawable/ic_add_2_black_24dp"
         android:title="@string/title_add_hike" />
-
-    <item
-        android:id="@+id/search_fragment"
-        android:icon="@drawable/ic_feature_search_black_24dp"
-        android:title="@string/title_search" />
 
     <item
         android:id="@+id/navigation_profile"

@@ -15,13 +15,13 @@
         android:id="@+id/navigation_hikes"
         android:name="com.example.mhike_native.ui.hikes.HikesFragment"
         android:label="@string/title_hikes"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_all_hikes" />
 
     <fragment
         android:id="@+id/navigation_add_hike"
         android:name="com.example.mhike_native.ui.notifications.AddHikeFragment"
         android:label="@string/title_add_hike"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_add" />
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.mhike_native.ui.profile.ProfileFragment"

@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.mhike_native.databinding.FragmentDashboardBinding;
+import com.example.mhike_native.databinding.FragmentAllHikesBinding;
 
 public class HikesFragment extends Fragment {
 
-    private FragmentDashboardBinding binding;
+    private FragmentAllHikesBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HikesViewModel dashboardViewModel =
                 new ViewModelProvider(this).get(HikesViewModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentAllHikesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textDashboard;

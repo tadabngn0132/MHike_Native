@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.mhike_native.databinding.FragmentNotificationsBinding;
+import com.example.mhike_native.databinding.FragmentAddBinding;
 
 public class AddHikeFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentAddBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         AddHikeViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(AddHikeViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentAddBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;
