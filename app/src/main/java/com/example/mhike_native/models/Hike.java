@@ -3,7 +3,7 @@ package com.example.mhike_native.models;
 import java.time.LocalDate;
 
 public class Hike {
-    private int id;
+    private long id;
     private String name;
     private String location;
     private LocalDate date;
@@ -25,7 +25,7 @@ public class Hike {
         this.description = description;
     }
 
-    public Hike(int id, String name, String location, LocalDate date, boolean parking_available, double length_km, String difficulty, String description) {
+    public Hike(long id, String name, String location, LocalDate date, boolean parking_available, double length_km, String difficulty, String description) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -36,8 +36,12 @@ public class Hike {
         this.description = description;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

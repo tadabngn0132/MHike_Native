@@ -2,11 +2,17 @@ package com.example.mhike_native;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.models.Observation;
+
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MHikeDB.db";
@@ -86,12 +92,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TITLE, observation.getTitle());
-        values.put(KEY_TIMESTAMP, observation.getTimestamp().toSecondOfDay());
+        values.put(KEY_TIMESTAMP, observation.getTimestamp().toEpochSecond(ZoneOffset.UTC));
         values.put(KEY_COMMENTS, observation.getComments());
         values.put(KEY_HIKE_ID, observation.getHike_id());
 
         long id = db.insert(TABLE_OBSERVATIONS, null, values);
         db.close();
         return id;
+    }
+
+    public List<Hike> getAllHikes() {
+        List<Hike> hikeList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_HIKES;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Hike hike = new Hike();
+                hike.setId(cursor.getLong(0));
+                hike.setName(cursor.getString(1));
+                hike.setLocation(cursor.getString(2));
+                hike.setDate(LocalDate.ofEpochDay(cursor.getLong(3)));
+                hike.setParking_available(cursor.getInt(4) == 1);
+                hike.setLength_km(cursor.getDouble(5));
+                hike.setDifficulty(cursor.getString(6));
+                hike.setDescription(cursor.getString(7));
+                hikeList.add(hike);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return hikeList;
+    }
+
+    public List<Observation> getAllObservations() {
+        List<Observation> observationList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Observation observation = new Observation();
+                observation.setId(cursor.getLong(0));
+                observation.setTitle(cursor.getString(1));
+                observation.setTimestamp(LocalDate.ofEpochDay(cursor.getLong(2)).atStartOfDay());
+                observation.setComments(cursor.getString(3));
+                observation.setHike_id(cursor.getInt(4));
+                observationList.add(observation);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return observationList;
     }
 }
