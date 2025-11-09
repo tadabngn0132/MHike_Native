@@ -8,6 +8,34 @@
 
     // Added for Profile fragment
     <string name="title_profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    // Add Hike Form Strings
+    <string name="hint_hike_name">Hike Name</string>
+    <string name="hint_location">Location (Region, Country)</string>
+    <string name="hint_date">Date (DD/MM/YYYY)</string>
+    <string name="hint_length">Length (km)</string>
+
+    <string-array name="difficulty_options">
+        <item>Easy</item>
+        <item>Moderate</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="difficulty_values">
+        <item>easy</item>
+        <item>moderate</item>
+        <item>hard</item>
+    </string-array>
+
+    <string-array name="parking_available">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="parking_values">
+        <item>yes</item>
+        <item>no</item>
+    </string-array>
+
+    <string name="hint_description">Any additional notes?</string>
 </resources>
