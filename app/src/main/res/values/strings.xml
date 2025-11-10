@@ -38,4 +38,7 @@
     </string-array>
 
     <string name="hint_description">Any additional notes?</string>
+
+    <string name="btn_add_hike">Add Hike</string>
+    <string name="btn_reset">Reset</string>
 </resources>
