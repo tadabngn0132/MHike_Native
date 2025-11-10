@@ -88,6 +88,7 @@
         android:layout_width="380dp"
         android:layout_height="56dp"
         android:layout_marginTop="328dp"
+        android:dropDownWidth="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
