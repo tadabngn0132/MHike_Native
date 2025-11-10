@@ -1,4 +1,4 @@
-package com.example.mhike_native.ui.notifications;
+package com.example.mhike_native.ui.add_hike;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

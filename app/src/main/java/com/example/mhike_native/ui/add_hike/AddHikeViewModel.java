@@ -1,4 +1,4 @@
-package com.example.mhike_native.ui.notifications;
+package com.example.mhike_native.ui.add_hike;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
