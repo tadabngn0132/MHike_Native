@@ -1,7 +1,6 @@
 package com.example.mhike_native.ui.add_hike;
 
 import android.app.Application;
-import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -13,19 +12,110 @@ import com.example.mhike_native.models.Hike;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class AddHikeViewModel extends AndroidViewModel {
     private final DatabaseHelper databaseHelper;
+    private final MutableLiveData<String> mText;
+    private final MutableLiveData<String> errorMessage;
+    private final MutableLiveData<Boolean> hikeAdded;
+    private final MutableLiveData<String> successMessage;
 
     public AddHikeViewModel(@NonNull Application application) {
         super(application);
         this.databaseHelper = new DatabaseHelper(getApplication());
+        this.mText = new MutableLiveData<>();
+        this.errorMessage = new MutableLiveData<>();
+        this.hikeAdded = new MutableLiveData<>();
+        this.successMessage = new MutableLiveData<>();
+        mText.setValue("Add New Hike");
     }
 
-    private void addHike(String name, String location, String dateString, boolean parkingAvailable, double length, String difficulty, String description) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        Hike hike = new Hike(name, location, date, parkingAvailable, length, difficulty, description);
-        databaseHelper.addHike(hike);
+    public LiveData<String> getText() {
+        return mText;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    public LiveData<Boolean> isHikeAdded() {
+        return hikeAdded;
+    }
+
+    public LiveData<String> getSuccessMessage() {
+        return successMessage;
+    }
+
+    private boolean addHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
+
+        // Validate required fields
+        if (name == null || name.trim().isEmpty()) {
+            errorMessage.setValue("Please enter a hike name");
+            return false;
+        }
+
+        if (location == null || location.trim().isEmpty()) {
+            errorMessage.setValue("Please enter a location");
+            return false;
+        }
+
+        // Handle date parsing and validation logic
+        if (dateString == null || dateString.trim().isEmpty()) {
+            errorMessage.setValue("Please enter a date");
+            return false;
+        }
+
+        LocalDate date;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            date = LocalDate.parse(dateString, formatter);
+        } catch (DateTimeParseException e) {
+            errorMessage.setValue("Please enter date with correct format (DD/MM/YYYY)");
+            return false;
+        }
+
+        // Handle length parsing and validation logic
+        if (lengthString == null || lengthString.trim().isEmpty()) {
+            errorMessage.setValue("Please enter the length of the hike");
+            return false;
+        }
+
+        double length;
+        try {
+            length = Double.parseDouble(lengthString);
+            if (length <= 0) {
+                errorMessage.setValue("Please enter a positive number for length");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            errorMessage.setValue("Please enter a valid number for length");
+            return false;
+        }
+
+        // Handle parking available parsing
+        boolean parkingAvailable = "yes".equalsIgnoreCase(parkingAvailableString);
+
+        // Create Hike object and save to database
+        Hike hike = new Hike(
+            name.trim(),
+            location.trim(),
+            date,
+            parkingAvailable,
+            length,
+            difficulty,
+            description == null ? "" : description.trim()
+        );
+
+        long id = databaseHelper.addHike(hike);
+
+        if (id > 0) {
+            hikeAdded.setValue(true);
+            successMessage.setValue("Hike added successfully!");
+            return true;
+        } else {
+            errorMessage.setValue("Failed to add hike. Please try again.");
+            return false;
+        }
     }
 }
