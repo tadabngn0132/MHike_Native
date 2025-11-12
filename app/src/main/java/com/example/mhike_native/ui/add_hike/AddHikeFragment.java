@@ -1,5 +1,6 @@
 package com.example.mhike_native.ui.add_hike;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,20 +21,30 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentAddBinding;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class AddHikeFragment extends Fragment {
 
     private FragmentAddBinding binding;
+    private AddHikeViewModel addHikeViewModel;
+    private Calendar calendar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        AddHikeViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(AddHikeViewModel.class);
+        addHikeViewModel = new ViewModelProvider(this).get(AddHikeViewModel.class);
 
         binding = FragmentAddBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        addHikeViewModel.getText().observe(getViewLifecycleOwner(), mText -> binding.textAddHike.setText(mText));
+        addHikeViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                // Display error message to the user
+                binding.textAddHike.setText(errorMessage);
+            }
+        });
         return root;
     }
 
@@ -40,11 +52,35 @@ public class AddHikeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set up date picker for the date EditText
+        calendar = Calendar.getInstance();
+
+//        binding.editTextDate.setOnClickListener(v -> {
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(
+//                requireContext(),
+//                (dateView, year, month, dayOfMonth) -> {
+//                    calendar.set(Calendar.YEAR, year);
+//                    calendar.set(Calendar.MONTH, month);
+//                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//                    binding.editTextDate.setText(dateFormat.format(calendar.getTime()));
+//                },
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+//            );
+//            datePickerDialog.show();
+//        });
+
+        // Set up button click listeners
         binding.btnAdd.setOnClickListener(v -> onClickedAddHikeBtn());
         binding.btnReset.setOnClickListener(v -> onClickedResetBtn());
 
+        // Set up the difficulty and parking available spinners
+        // Difficulty Spinner
         ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.difficulty_options, android.R.layout.simple_spinner_item);
         binding.spinnerDifficulty.setAdapter(difficultyAdapter);
+        // Parking Available Spinner
         ArrayAdapter<CharSequence> parkingAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.parking_available, android.R.layout.simple_spinner_item);
         binding.spinnerParkingAvailable.setAdapter(parkingAdapter);
     }
@@ -56,7 +92,27 @@ public class AddHikeFragment extends Fragment {
     }
 
     private void onClickedAddHikeBtn() {
-        // Implement the logic to add a hike
+        // Retrieve input values from the form
+        String name = binding.editTextHikeName.getText().toString();
+        String location = binding.editTextLocation.getText().toString();
+        String date = binding.editTextDate.getText().toString();
+        String length = binding.editTextLength.getText().toString();
+
+        // Map spinner selections to their corresponding values
+        // Difficulty
+        String[] difficultyValues = getResources().getStringArray(R.array.difficulty_values);
+        String difficulty = difficultyValues[binding.spinnerDifficulty.getSelectedItemPosition()];
+
+        // Parking Available
+        String[] parkingValues = getResources().getStringArray(R.array.parking_values);
+        String parkingAvailable = parkingValues[binding.spinnerParkingAvailable.getSelectedItemPosition()];
+
+        String description = binding.editTextDescription.getText().toString();
+
+        // Call ViewModel method to add the hike
+        boolean isHikeCreated = addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
+
+        Toast.makeText(getContext(), isHikeCreated ? "Hike added successfully!" : "Failed to add hike. Please try again.", Toast.LENGTH_SHORT).show();
     }
 
     private void onClickedResetBtn() {

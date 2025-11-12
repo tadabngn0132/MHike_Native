@@ -18,16 +18,12 @@ public class AddHikeViewModel extends AndroidViewModel {
     private final DatabaseHelper databaseHelper;
     private final MutableLiveData<String> mText;
     private final MutableLiveData<String> errorMessage;
-    private final MutableLiveData<Boolean> hikeAdded;
-    private final MutableLiveData<String> successMessage;
 
     public AddHikeViewModel(@NonNull Application application) {
         super(application);
         this.databaseHelper = new DatabaseHelper(getApplication());
         this.mText = new MutableLiveData<>();
         this.errorMessage = new MutableLiveData<>();
-        this.hikeAdded = new MutableLiveData<>();
-        this.successMessage = new MutableLiveData<>();
         mText.setValue("Add New Hike");
     }
 
@@ -39,15 +35,7 @@ public class AddHikeViewModel extends AndroidViewModel {
         return errorMessage;
     }
 
-    public LiveData<Boolean> isHikeAdded() {
-        return hikeAdded;
-    }
-
-    public LiveData<String> getSuccessMessage() {
-        return successMessage;
-    }
-
-    private boolean addHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
+    protected boolean addHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
 
         // Validate required fields
         if (name == null || name.trim().isEmpty()) {
@@ -109,13 +97,6 @@ public class AddHikeViewModel extends AndroidViewModel {
 
         long id = databaseHelper.addHike(hike);
 
-        if (id > 0) {
-            hikeAdded.setValue(true);
-            successMessage.setValue("Hike added successfully!");
-            return true;
-        } else {
-            errorMessage.setValue("Failed to add hike. Please try again.");
-            return false;
-        }
+        return id > 0;
     }
 }
