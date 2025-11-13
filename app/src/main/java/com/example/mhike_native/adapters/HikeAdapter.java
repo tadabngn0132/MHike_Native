@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mhike_native.R;
 import com.example.mhike_native.models.Hike;
 
 import org.jspecify.annotations.NonNull;
@@ -16,24 +18,20 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
     private List<Hike> hikeList = new ArrayList<>();
 
     public static class HikeViewHolder extends RecyclerView.ViewHolder {
-        android.widget.TextView tvHikeId;
         android.widget.TextView tvHikeName;
         android.widget.TextView tvLocation;
         android.widget.TextView tvLength;
         android.widget.TextView tvDifficulty;
         android.widget.TextView tvDate;
         android.widget.TextView tvParkingAvailable;
-        android.widget.TextView tvDescription;
         public HikeViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvHikeId = itemView.findViewById(R.id.tvHikeId);
             tvHikeName = itemView.findViewById(R.id.tvHikeName);
             tvLocation = itemView.findViewById(R.id.tvLocation);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvLength = itemView.findViewById(R.id.tvLength);
             tvDifficulty = itemView.findViewById(R.id.tvDifficulty);
             tvParkingAvailable = itemView.findViewById(R.id.tvParkingAvailable);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
         }
     }
 
@@ -54,7 +52,6 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
         holder.tvDifficulty.setText(hike.getDifficulty());
         holder.tvDate.setText(hike.getDate().toString());
         holder.tvParkingAvailable.setText(hike.isParking_available() ? "Yes" : "No");
-        holder.tvDescription.setText(hike.getDescription());
     }
 
     @Override
