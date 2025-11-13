@@ -10,11 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mhike_native.adapters.HikeAdapter;
 import com.example.mhike_native.databinding.FragmentAllHikesBinding;
 
 public class HikesFragment extends Fragment {
 
     private FragmentAllHikesBinding binding;
+    private HikeAdapter hikeAdapter;
+    private HikesViewModel hikesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
