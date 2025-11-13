@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.mhike_native.adapters.HikeAdapter;
 import com.example.mhike_native.databinding.FragmentAllHikesBinding;
@@ -16,19 +17,22 @@ import com.example.mhike_native.databinding.FragmentAllHikesBinding;
 public class HikesFragment extends Fragment {
 
     private FragmentAllHikesBinding binding;
-    private HikeAdapter hikeAdapter;
-    private HikesViewModel hikesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HikesViewModel dashboardViewModel =
+        HikesViewModel hikesViewModel =
                 new ViewModelProvider(this).get(HikesViewModel.class);
 
         binding = FragmentAllHikesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textHikes;
+        hikesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        HikeAdapter hikeAdapter = new HikeAdapter();
+        binding.recyclerViewHikes.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerViewHikes.setAdapter(hikeAdapter);
+        hikesViewModel.getHikes().observe(getViewLifecycleOwner(), hikeAdapter::setHikeList);
         return root;
     }
 
