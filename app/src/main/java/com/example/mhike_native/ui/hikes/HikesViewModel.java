@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.mhike_native.DatabaseHelper;
+import com.example.mhike_native.helpers.DatabaseHelper;
 import com.example.mhike_native.models.Hike;
 
 import org.jspecify.annotations.NonNull;

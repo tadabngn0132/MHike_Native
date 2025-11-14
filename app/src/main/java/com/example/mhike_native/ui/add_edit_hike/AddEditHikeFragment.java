@@ -1,16 +1,10 @@
-package com.example.mhike_native.ui.add_hike;
+package com.example.mhike_native.ui.add_edit_hike;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,23 +13,20 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mhike_native.R;
-import com.example.mhike_native.databinding.FragmentAddBinding;
+import com.example.mhike_native.databinding.FragmentAddEditBinding;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
-public class AddHikeFragment extends Fragment {
+public class AddEditHikeFragment extends Fragment {
 
-    private FragmentAddBinding binding;
-    private AddHikeViewModel addHikeViewModel;
-    private Calendar calendar;
+    private FragmentAddEditBinding binding;
+    private AddEditHikeViewModel addHikeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        addHikeViewModel = new ViewModelProvider(this).get(AddHikeViewModel.class);
+        addHikeViewModel = new ViewModelProvider(this).get(AddEditHikeViewModel.class);
 
-        binding = FragmentAddBinding.inflate(inflater, container, false);
+        binding = FragmentAddEditBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         addHikeViewModel.getText().observe(getViewLifecycleOwner(), mText -> binding.textAddHike.setText(mText));
@@ -45,6 +36,10 @@ public class AddHikeFragment extends Fragment {
                 binding.textAddHike.setText(errorMessage);
             }
         });
+        addHikeViewModel.getHikeNameErrMsg().observe(getViewLifecycleOwner(), hikeNameErrMsg -> binding.tvHikeNameErr.setError(hikeNameErrMsg));
+        addHikeViewModel.getLocationErrMsg().observe(getViewLifecycleOwner(), locationErrMsg -> binding.tvLocationErr.setError(locationErrMsg));
+        addHikeViewModel.getDateErrMsg().observe(getViewLifecycleOwner(), dateErrMsg -> binding.tvDateErr.setError(dateErrMsg));
+        addHikeViewModel.getLengthErrMsg().observe(getViewLifecycleOwner(), lengthErrMsg -> binding.tvLengthErr.setError(lengthErrMsg));
         return root;
     }
 
@@ -53,7 +48,7 @@ public class AddHikeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Set up date picker for the date EditText
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
 
 //        binding.editTextDate.setOnClickListener(v -> {
 //            DatePickerDialog datePickerDialog = new DatePickerDialog(

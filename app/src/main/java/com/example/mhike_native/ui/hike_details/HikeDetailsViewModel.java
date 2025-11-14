@@ -7,8 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.mhike_native.DatabaseHelper;
-import com.example.mhike_native.models.Hike;
+import com.example.mhike_native.helpers.DatabaseHelper;
 
 public class HikeDetailsViewModel extends AndroidViewModel {
 
@@ -26,8 +25,7 @@ public class HikeDetailsViewModel extends AndroidViewModel {
     }
 
     protected boolean deleteHike(int hikeId) {
-        // Handle delete logic here
         long id = databaseHelper.deleteHike(hikeId);
-        return id > 0;
+        return id != -1;
     }
 }

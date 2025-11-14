@@ -1,4 +1,4 @@
-package com.example.mhike_native;
+package com.example.mhike_native.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
