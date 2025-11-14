@@ -99,4 +99,10 @@ public class AddHikeViewModel extends AndroidViewModel {
 
         return id > 0;
     }
+
+    protected boolean updateHike(Hike hike) {
+        // Handle update logic here
+        long id = databaseHelper.updateHike(hike);
+        return id > 0;
+    }
 }

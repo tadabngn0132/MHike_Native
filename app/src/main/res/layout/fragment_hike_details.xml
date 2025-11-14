@@ -6,6 +6,7 @@
     tools:context=".ui.hike_details.HikeDetailsFragment">
 
     <TextView
+        android:id="@+id/tvHikeDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Hello" />

@@ -182,16 +182,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public void deleteHike(long id) {
+    public long deleteHike(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_HIKES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+        long deletedHikeId = db.delete(TABLE_HIKES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.delete(TABLE_OBSERVATIONS, KEY_HIKE_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
+        return deletedHikeId;
     }
 
-    public void deleteObservation(long id) {
+    public long deleteObservation(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_OBSERVATIONS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+        long deletedObservationId = db.delete(TABLE_OBSERVATIONS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
+        return deletedObservationId;
     }
 }
