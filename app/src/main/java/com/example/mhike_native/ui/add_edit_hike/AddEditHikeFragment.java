@@ -36,10 +36,7 @@ public class AddEditHikeFragment extends Fragment {
                 binding.textAddHike.setText(errorMessage);
             }
         });
-        addHikeViewModel.getHikeNameErrMsg().observe(getViewLifecycleOwner(), hikeNameErrMsg -> binding.tvHikeNameErr.setError(hikeNameErrMsg));
-        addHikeViewModel.getLocationErrMsg().observe(getViewLifecycleOwner(), locationErrMsg -> binding.tvLocationErr.setError(locationErrMsg));
-        addHikeViewModel.getDateErrMsg().observe(getViewLifecycleOwner(), dateErrMsg -> binding.tvDateErr.setError(dateErrMsg));
-        addHikeViewModel.getLengthErrMsg().observe(getViewLifecycleOwner(), lengthErrMsg -> binding.tvLengthErr.setError(lengthErrMsg));
+
         return root;
     }
 

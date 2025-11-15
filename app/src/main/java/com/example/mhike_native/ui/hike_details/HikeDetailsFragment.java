@@ -35,18 +35,18 @@ public class HikeDetailsFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Set up delete button click listener
-        int hikeId = getArguments() != null ? getArguments().getInt("hikeId", -1) : -1;
-        if (hikeId != -1) {
-            binding.deleteButton.setOnClickListener(v -> onDeleteButtonClick(hikeId));
-        } else {
-            binding.deleteButton.setEnabled(false);
-        }
-    }
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//
+//        // Set up delete button click listener
+//        int hikeId = getArguments() != null ? getArguments().getInt("hikeId", -1) : -1;
+//        if (hikeId != -1) {
+//            binding.deleteButton.setOnClickListener(v -> onDeleteButtonClick(hikeId));
+//        } else {
+//            binding.deleteButton.setEnabled(false);
+//        }
+//    }
 
     @Override
     public void onDestroyView() {
