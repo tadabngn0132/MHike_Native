@@ -29,14 +29,6 @@ public class AddEditHikeFragment extends Fragment {
         binding = FragmentAddEditBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        addHikeViewModel.getText().observe(getViewLifecycleOwner(), mText -> binding.textAddHike.setText(mText));
-        addHikeViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-            if (errorMessage != null && !errorMessage.isEmpty()) {
-                // Display error message to the user
-                binding.textAddHike.setText(errorMessage);
-            }
-        });
-
         return root;
     }
 
@@ -105,6 +97,7 @@ public class AddEditHikeFragment extends Fragment {
         boolean isHikeCreated = addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
 
         Toast.makeText(getContext(), isHikeCreated ? "Hike added successfully!" : "Failed to add hike. Please try again.", Toast.LENGTH_SHORT).show();
+        onClickedResetBtn();
     }
 
     private void onClickedResetBtn() {

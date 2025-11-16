@@ -26,9 +26,6 @@ public class HikesFragment extends Fragment {
         binding = FragmentAllHikesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHikes;
-        hikesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
         HikeAdapter hikeAdapter = new HikeAdapter();
         binding.recyclerViewHikes.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerViewHikes.setAdapter(hikeAdapter);

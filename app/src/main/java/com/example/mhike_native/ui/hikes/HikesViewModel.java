@@ -14,8 +14,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class HikesViewModel extends AndroidViewModel {
-
-    private final MutableLiveData<String> mText;
     private final DatabaseHelper databaseHelper;
     private final MutableLiveData<List<Hike>> hikesLiveData;
 
@@ -23,13 +21,7 @@ public class HikesViewModel extends AndroidViewModel {
         super(application);
         this.databaseHelper = new DatabaseHelper(application);
         this.hikesLiveData = new MutableLiveData<>();
-        this.mText = new MutableLiveData<>();
-        mText.setValue("All hikes");
         loadAllHikes();
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public LiveData<List<Hike>> getHikes() {

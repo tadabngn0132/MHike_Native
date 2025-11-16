@@ -16,7 +16,6 @@ import java.time.format.DateTimeParseException;
 
 public class AddEditHikeViewModel extends AndroidViewModel {
     private final DatabaseHelper databaseHelper;
-    private final MutableLiveData<String> mText;
     private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<String> hikeNameErrMsg;
     private final MutableLiveData<String> locationErrMsg;
@@ -26,17 +25,11 @@ public class AddEditHikeViewModel extends AndroidViewModel {
     public AddEditHikeViewModel(@NonNull Application application) {
         super(application);
         this.databaseHelper = new DatabaseHelper(getApplication());
-        this.mText = new MutableLiveData<>();
         this.errorMessage = new MutableLiveData<>();
-        mText.setValue("Add New Hike");
         this.hikeNameErrMsg = new MutableLiveData<>();
         this.locationErrMsg = new MutableLiveData<>();
         this.dateErrMsg = new MutableLiveData<>();
         this.lengthErrMsg = new MutableLiveData<>();
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public LiveData<String> getErrorMessage() {

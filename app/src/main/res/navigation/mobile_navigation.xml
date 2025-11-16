@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_add_hike"
         android:name="com.example.mhike_native.ui.add_edit_hike.AddEditHikeFragment"
-        android:label="@string/title_add_hike"
+        android:label="@string/label_title_add_hike"
         tools:layout="@layout/fragment_add_edit" />
     <fragment
         android:id="@+id/navigation_profile"
