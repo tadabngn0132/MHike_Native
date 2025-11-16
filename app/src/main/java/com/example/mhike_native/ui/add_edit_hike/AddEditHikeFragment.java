@@ -27,9 +27,8 @@ public class AddEditHikeFragment extends Fragment {
         addHikeViewModel = new ViewModelProvider(this).get(AddEditHikeViewModel.class);
 
         binding = FragmentAddEditBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class AddEditHikeFragment extends Fragment {
 
         // Map spinner selections to their corresponding values
         // Difficulty
-        String[] difficultyValues = getResources().getStringArray(R.array.difficulty_values);
+        String[] difficultyValues = getResources().getStringArray(R.array.difficulty_options);
         String difficulty = difficultyValues[binding.spinnerDifficulty.getSelectedItemPosition()];
 
         // Parking Available

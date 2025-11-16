@@ -4,56 +4,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
-    android:layout_margin="16dp"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
 
         <TextView
             android:id="@+id/tvHikeName"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="TextView"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvDifficulty"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.155" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_location_on_black_24dp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             android:gravity="start|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvHikeName" />
 
         <TextView
             android:id="@+id/tvParkingAvailable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:drawableStart="@drawable/ic_local_parking_black_24dp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             android:gravity="start|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -62,15 +66,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvDate"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.83" />
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
         <TextView
             android:id="@+id/tvLength"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_route_black_24dp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             android:gravity="start|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -86,10 +89,10 @@
             android:id="@+id/tvDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:drawableStart="@drawable/ic_calendar_today_black_24dp"
-            android:drawablePadding="4dp"
+            android:drawablePadding="2dp"
             android:gravity="start|center_vertical"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -105,7 +108,7 @@
             android:id="@+id/tvDifficulty"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="start|center_vertical"
+            android:gravity="start"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="TextView"

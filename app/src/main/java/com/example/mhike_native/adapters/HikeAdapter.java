@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mhike_native.R;
@@ -11,6 +12,7 @@ import com.example.mhike_native.models.Hike;
 
 import org.jspecify.annotations.NonNull;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +50,18 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
         Hike hike = hikeList.get(position);
         holder.tvHikeName.setText(hike.getName());
         holder.tvLocation.setText(hike.getLocation());
-        holder.tvLength.setText(String.valueOf(hike.getLength_km()));
+
+        String lengthString = hike.getLength_km() + " km";
+        holder.tvLength.setText(lengthString);
         holder.tvDifficulty.setText(hike.getDifficulty());
-        holder.tvDate.setText(hike.getDate().toString());
+        if (hike.getDifficulty().equalsIgnoreCase("Easy")) {
+            holder.tvDifficulty.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
+        } else if (hike.getDifficulty().equalsIgnoreCase("Moderate")) {
+            holder.tvDifficulty.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.orange));
+        } else {
+            holder.tvDifficulty.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.red));
+        }
+        holder.tvDate.setText(hike.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         holder.tvParkingAvailable.setText(hike.isParking_available() ? "Yes" : "No");
     }
 

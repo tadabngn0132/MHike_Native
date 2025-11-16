@@ -22,12 +22,6 @@
         <item>Hard</item>
     </string-array>
 
-    <string-array name="difficulty_values">
-        <item>easy</item>
-        <item>moderate</item>
-        <item>hard</item>
-    </string-array>
-
     <string-array name="parking_available">
         <item>Yes</item>
         <item>No</item>
