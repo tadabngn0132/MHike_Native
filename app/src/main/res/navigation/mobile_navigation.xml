@@ -15,7 +15,11 @@
         android:id="@+id/navigation_hikes"
         android:name="com.example.mhike_native.ui.hikes.HikesFragment"
         android:label="@string/title_hikes"
-        tools:layout="@layout/fragment_all_hikes" />
+        tools:layout="@layout/fragment_all_hikes" >
+        <action
+            android:id="@+id/action_navigation_hikes_to_hikeDetailsFragment"
+            app:destination="@id/hikeDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_add_hike"

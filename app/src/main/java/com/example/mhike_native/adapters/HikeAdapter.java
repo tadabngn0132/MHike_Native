@@ -19,6 +19,16 @@ import java.util.List;
 public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder> {
     private List<Hike> hikeList = new ArrayList<>();
 
+    public interface OnHikeListener {
+        void onHikeClicked(long hikeId);
+    }
+
+    private OnHikeListener onHikeListener;
+
+    public void setOnClickedHikeListener(OnHikeListener listener) {
+        this.onHikeListener = listener;
+    }
+
     public static class HikeViewHolder extends RecyclerView.ViewHolder {
         android.widget.TextView tvHikeName;
         android.widget.TextView tvLocation;
@@ -63,6 +73,12 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
         }
         holder.tvDate.setText(hike.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         holder.tvParkingAvailable.setText(hike.isParking_available() ? "Yes" : "No");
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onHikeListener != null) {
+                onHikeListener.onHikeClicked(hike.getId());
+            }
+        });
     }
 
     @Override
