@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.mhike_native.R;
 import com.example.mhike_native.adapters.HikeAdapter;
 import com.example.mhike_native.databinding.FragmentAllHikesBinding;
+import com.example.mhike_native.models.Hike;
 
 public class HikesFragment extends Fragment implements HikeAdapter.OnHikeListener {
 
@@ -37,7 +38,7 @@ public class HikesFragment extends Fragment implements HikeAdapter.OnHikeListene
     }
 
     @Override
-    public void onHikeClicked(long hikeId) {
+    public void onHikeClicked(Hike hike) {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigate(R.id.action_navigation_hikes_to_hikeDetailsFragment);
     }
