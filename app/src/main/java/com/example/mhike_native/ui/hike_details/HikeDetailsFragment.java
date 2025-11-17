@@ -11,16 +11,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentHikeDetailsBinding;
+import com.example.mhike_native.models.Hike;
 
 public class HikeDetailsFragment extends Fragment {
 
     private FragmentHikeDetailsBinding binding;
     private HikeDetailsViewModel hikeDetailsViewModel;
+    private long hikeId = -1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -29,24 +29,33 @@ public class HikeDetailsFragment extends Fragment {
         binding = FragmentHikeDetailsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.tvHikeDetails;
-        hikeDetailsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
+
+        Hike hike = hikeDetailsViewModel.getHikeById(hikeId);
+        binding.tvHikeDetailsName.setText(hike.getName());
+        binding.tvHikeDetailsLocation.setText(hike.getLocation());
+        binding.tvHikeDetailsDate.setText(hike.getDate().toString());
+        String lengthString = hike.getLength_km() + " km";
+        binding.tvHikeDetailsLength.setText(lengthString);
+        binding.tvHikeDetailsDifficulty.setText(hike.getDifficulty());
+        String parkingAvailableString = hike.isParking_available() ? "Yes" : "No";
+        binding.tvHikeDetailsParkingAvailable.setText(parkingAvailableString);
+        binding.tvHikeDetailsDescription.setText(hike.getDescription());
 
         return root;
     }
 
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        // Set up delete button click listener
-//        int hikeId = getArguments() != null ? getArguments().getInt("hikeId", -1) : -1;
-//        if (hikeId != -1) {
-//            binding.deleteButton.setOnClickListener(v -> onDeleteButtonClick(hikeId));
-//        } else {
-//            binding.deleteButton.setEnabled(false);
-//        }
-//    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Set up delete button click listener
+        if (hikeId != -1) {
+            binding.btnDelete.setOnClickListener(v -> onDeleteButtonClick(hikeId));
+        } else {
+            binding.btnDelete.setEnabled(false);
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -54,7 +63,7 @@ public class HikeDetailsFragment extends Fragment {
         binding = null;
     }
 
-    private void onDeleteButtonClick(int hikeId) {
+    private void onDeleteButtonClick(long hikeId) {
         boolean isHikeDeleted = hikeDetailsViewModel.deleteHike(hikeId);
         Toast.makeText(getContext(), isHikeDeleted ? "Hike deleted successfully" : "Failed to delete hike", Toast.LENGTH_SHORT).show();
     }

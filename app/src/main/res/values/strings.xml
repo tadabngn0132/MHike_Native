@@ -10,6 +10,8 @@
     // Added for Profile fragment
     <string name="title_profile">Profile</string>
 
+    <string name="label_title_hike_details">Hike Details</string>
+
     // Add Hike Form Strings
     <string name="hint_hike_name">Hike Name</string>
     <string name="hint_location">Location (Region, Country)</string>

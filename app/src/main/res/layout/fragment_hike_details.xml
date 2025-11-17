@@ -4,62 +4,174 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".ui.hike_details.HikeDetailsFragment">
 
     <TextView
-        android:id="@+id/tvHikeDetailsName"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvHikeDetailsNameLabel"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Name"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="72dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvHikeDetailsLocation"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvHikeDetailsDateLabel"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Location"
-        tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="121dp" />
-
-    <TextView
-        android:id="@+id/tvHikeDetailsDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Date"
-        tools:layout_editor_absoluteX="105dp"
-        tools:layout_editor_absoluteY="172dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsLocation" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsNameLabel" />
 
     <TextView
         android:id="@+id/tvHikeDetailsLength"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Length"
-        tools:layout_editor_absoluteX="273dp"
-        tools:layout_editor_absoluteY="73dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsLengthLabel" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDateLabel" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsLengthLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Length"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDate" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsLocationLabel" />
 
     <TextView
         android:id="@+id/tvHikeDetailsDifficulty"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Difficulty"
-        tools:layout_editor_absoluteX="272dp"
-        tools:layout_editor_absoluteY="116dp" />
-
-    <TextView
-        android:id="@+id/tvHikeDetailsParkingAvailable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Parking Available"
-        tools:layout_editor_absoluteX="272dp"
-        tools:layout_editor_absoluteY="173dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDifficultyLabel" />
 
     <TextView
         android:id="@+id/tvHikeDetailsDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Description"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="254dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDescriptionLabel" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsDescriptionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsParkingAvailable" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsParkingAvailableLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Parking Available"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDifficulty" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsParkingAvailable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Parking Available"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsParkingAvailableLabel" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsDifficultyLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Difficulty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsLength" />
+
+    <TextView
+        android:id="@+id/tvHikeDetailsLocationLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsName" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Update"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
+        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnDelete" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="DELETE"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnUpdate"
+        app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
+    android:label="@string/label_title_hike_details"
     app:startDestination="@+id/navigation_home">
 
     <fragment
@@ -15,7 +16,7 @@
         android:id="@+id/navigation_hikes"
         android:name="com.example.mhike_native.ui.hikes.HikesFragment"
         android:label="@string/title_hikes"
-        tools:layout="@layout/fragment_all_hikes" >
+        tools:layout="@layout/fragment_all_hikes">
         <action
             android:id="@+id/action_navigation_hikes_to_hikeDetailsFragment"
             app:destination="@id/hikeDetailsFragment" />
@@ -40,5 +41,9 @@
         android:id="@+id/hikeDetailsFragment"
         android:name="com.example.mhike_native.ui.hike_details.HikeDetailsFragment"
         android:label="fragment_hike_details"
-        tools:layout="@layout/fragment_hike_details" />
+        tools:layout="@layout/fragment_hike_details" >
+        <action
+            android:id="@+id/action_hikeDetailsFragment_to_navigation_add_hike"
+            app:destination="@id/navigation_add_hike" />
+    </fragment>
 </navigation>

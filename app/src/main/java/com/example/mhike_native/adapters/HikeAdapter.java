@@ -20,7 +20,7 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
     private List<Hike> hikeList = new ArrayList<>();
 
     public interface OnHikeListener {
-        void onHikeClicked(Hike hike);
+        void onHikeClicked(long hikeId);
     }
 
     private OnHikeListener onHikeListener;
@@ -76,7 +76,7 @@ public class HikeAdapter extends RecyclerView.Adapter<HikeAdapter.HikeViewHolder
 
         holder.itemView.setOnClickListener(v -> {
             if (onHikeListener != null) {
-                onHikeListener.onHikeClicked(hike);
+                onHikeListener.onHikeClicked(hike.getId());
             }
         });
     }

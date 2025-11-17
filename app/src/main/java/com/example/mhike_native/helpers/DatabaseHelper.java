@@ -153,6 +153,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return observationList;
     }
 
+    public Hike getHikeById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)});
+
+        Hike hike = null;
+        if (cursor.moveToFirst()) {
+            hike = new Hike();
+            hike.setId(cursor.getLong(0));
+            hike.setName(cursor.getString(1));
+            hike.setLocation(cursor.getString(2));
+            hike.setDate(LocalDate.ofEpochDay(cursor.getLong(3)));
+            hike.setParking_available(cursor.getInt(4) == 1);
+            hike.setLength_km(cursor.getDouble(5));
+            hike.setDifficulty(cursor.getString(6));
+            hike.setDescription(cursor.getString(7));
+        }
+
+        cursor.close();
+        db.close();
+        return hike;
+    }
+
+    public Observation getObservationById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " +TABLE_OBSERVATIONS + " WHERE " + KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)});
+
+        Observation observation = null;
+        if (cursor.moveToFirst()) {
+            observation = new Observation();
+            observation.setId(cursor.getLong(0));
+            observation.setTitle(cursor.getString(1));
+            observation.setTimestamp(LocalDateTime.ofEpochSecond(cursor.getLong(2), 0, ZoneOffset.UTC));
+            observation.setComments(cursor.getString(3));
+            observation.setHike_id(cursor.getInt(4));
+        }
+
+        cursor.close();
+        db.close();
+        return observation;
+    }
+
     public long updateHike(Hike hike) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
