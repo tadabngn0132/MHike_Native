@@ -53,6 +53,15 @@ public class AddEditHikeFragment extends Fragment {
             Toast.makeText(getContext(), lengthErrMsg, Toast.LENGTH_SHORT).show();
         });
 
+        long hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
+        if (hikeId == -1) {
+            binding.btnAdd.setText(R.string.btn_add_hike);
+        } else {
+            binding.btnAdd.setText(R.string.btn_update_hike);
+
+
+        }
+
         return root;
     }
 

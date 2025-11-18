@@ -23,10 +23,29 @@
     </fragment>
 
     <fragment
+        android:id="@+id/hikeDetailsFragment"
+        android:name="com.example.mhike_native.ui.hike_details.HikeDetailsFragment"
+        android:label="@string/label_title_hike_details"
+        tools:layout="@layout/fragment_hike_details">
+        <action
+            android:id="@+id/action_hikeDetailsFragment_to_navigation_add_hike"
+            app:destination="@id/navigation_add_hike" />
+        <argument
+            android:name="hikeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_add_hike"
         android:name="com.example.mhike_native.ui.add_edit_hike.AddEditHikeFragment"
         android:label="@string/label_title_add_hike"
-        tools:layout="@layout/fragment_add_edit" />
+        tools:layout="@layout/fragment_add_edit" >
+        <argument
+            android:name="hikeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.mhike_native.ui.profile.ProfileFragment"
@@ -37,13 +56,4 @@
         android:name="com.example.mhike_native.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" />
-    <fragment
-        android:id="@+id/hikeDetailsFragment"
-        android:name="com.example.mhike_native.ui.hike_details.HikeDetailsFragment"
-        android:label="fragment_hike_details"
-        tools:layout="@layout/fragment_hike_details" >
-        <action
-            android:id="@+id/action_hikeDetailsFragment_to_navigation_add_hike"
-            app:destination="@id/navigation_add_hike" />
-    </fragment>
 </navigation>

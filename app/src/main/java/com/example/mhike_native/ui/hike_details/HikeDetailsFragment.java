@@ -56,8 +56,10 @@ public class HikeDetailsFragment extends Fragment {
         // Set up delete button click listener
         if (hikeId != -1) {
             binding.btnDelete.setOnClickListener(v -> onDeleteButtonClick(hikeId));
+            binding.btnUpdate.setOnClickListener(v -> onUpdateButtonClick(hikeId));
         } else {
             binding.btnDelete.setEnabled(false);
+            binding.btnUpdate.setEnabled(false);
         }
     }
 
@@ -76,5 +78,12 @@ public class HikeDetailsFragment extends Fragment {
             navController.popBackStack();
         }
         Toast.makeText(getContext(), isHikeDeleted ? "Hike deleted successfully" : "Failed to delete hike", Toast.LENGTH_SHORT).show();
+    }
+
+    private void onUpdateButtonClick(long hikeId) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("hikeId", hikeId);
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.action_hikeDetailsFragment_to_navigation_add_hike, bundle);
     }
 }
