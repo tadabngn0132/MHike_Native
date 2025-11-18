@@ -7,14 +7,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentHikeDetailsBinding;
 import com.example.mhike_native.models.Hike;
+import com.example.mhike_native.ui.hikes.HikesViewModel;
 
 public class HikeDetailsFragment extends Fragment {
 
@@ -65,6 +69,12 @@ public class HikeDetailsFragment extends Fragment {
 
     private void onDeleteButtonClick(long hikeId) {
         boolean isHikeDeleted = hikeDetailsViewModel.deleteHike(hikeId);
+        if (isHikeDeleted) {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            HikesViewModel hikesViewModel = new ViewModelProvider(requireActivity()).get(HikesViewModel.class);
+            hikesViewModel.loadAllHikes();
+            navController.popBackStack();
+        }
         Toast.makeText(getContext(), isHikeDeleted ? "Hike deleted successfully" : "Failed to delete hike", Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,24 +16,22 @@ import java.time.format.DateTimeParseException;
 
 public class AddEditHikeViewModel extends AndroidViewModel {
     private final DatabaseHelper databaseHelper;
-    private final MutableLiveData<String> errorMessage;
     private final MutableLiveData<String> hikeNameErrMsg;
     private final MutableLiveData<String> locationErrMsg;
     private final MutableLiveData<String> dateErrMsg;
     private final MutableLiveData<String> lengthErrMsg;
+    private final MutableLiveData<Boolean> isHikeAdded;
+    private final MutableLiveData<Boolean> isHikeUpdated;
 
     public AddEditHikeViewModel(@NonNull Application application) {
         super(application);
         this.databaseHelper = new DatabaseHelper(getApplication());
-        this.errorMessage = new MutableLiveData<>();
         this.hikeNameErrMsg = new MutableLiveData<>();
         this.locationErrMsg = new MutableLiveData<>();
         this.dateErrMsg = new MutableLiveData<>();
         this.lengthErrMsg = new MutableLiveData<>();
-    }
-
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
+        this.isHikeAdded = new MutableLiveData<>();
+        this.isHikeUpdated = new MutableLiveData<>();
     }
 
     public LiveData<String> getHikeNameErrMsg() {
@@ -52,26 +50,34 @@ public class AddEditHikeViewModel extends AndroidViewModel {
         return lengthErrMsg;
     }
 
-    protected boolean addHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
+    public LiveData<Boolean> getIsHikeAdded() {
+        return isHikeAdded;
+    }
+
+    public LiveData<Boolean> getIsHikeUpdated() {
+        return isHikeUpdated;
+    }
+
+    public void addHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
 
         // Validate required fields
         if (name == null || name.trim().isEmpty()) {
-//            errorMessage.setValue("Please enter a hike name");
             hikeNameErrMsg.setValue("Please enter a hike name");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         if (location == null || location.trim().isEmpty()) {
-//            errorMessage.setValue("Please enter a location");
             locationErrMsg.setValue("Please enter a location");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         // Handle date parsing and validation logic
         if (dateString == null || dateString.trim().isEmpty()) {
-//            errorMessage.setValue("Please enter a date");
             dateErrMsg.setValue("Please enter a date");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         LocalDate date;
@@ -79,30 +85,30 @@ public class AddEditHikeViewModel extends AndroidViewModel {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             date = LocalDate.parse(dateString, formatter);
         } catch (DateTimeParseException e) {
-//            errorMessage.setValue("Please enter date with correct format (DD/MM/YYYY)");
             dateErrMsg.setValue("Please enter date with correct format (DD/MM/YYYY)");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         // Handle length parsing and validation logic
         if (lengthString == null || lengthString.trim().isEmpty()) {
-//            errorMessage.setValue("Please enter the length of the hike");
             lengthErrMsg.setValue("Please enter the length of the hike");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         double length;
         try {
             length = Double.parseDouble(lengthString);
             if (length <= 0) {
-//                errorMessage.setValue("Please enter a positive number for length");
                 lengthErrMsg.setValue("Please enter a positive number for length");
-                return false;
+                isHikeAdded.setValue(false);
+                return;
             }
         } catch (NumberFormatException e) {
-//            errorMessage.setValue("Please enter a valid number for length");
             lengthErrMsg.setValue("Please enter a valid number for length");
-            return false;
+            isHikeAdded.setValue(false);
+            return;
         }
 
         // Handle parking available parsing
@@ -119,28 +125,32 @@ public class AddEditHikeViewModel extends AndroidViewModel {
             description == null ? "" : description.trim()
         );
 
-        long id = databaseHelper.addHike(hike);
-
-        return id != -1;
+        new Thread(() -> {
+            long id = databaseHelper.addHike(hike);
+            isHikeAdded.postValue(id != -1);
+        }).start();
     }
 
-    protected boolean updateHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
+    public void updateHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
 
         // Validate required fields
         if (name == null || name.trim().isEmpty()) {
             hikeNameErrMsg.setValue("Please enter a hike name");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         if (location == null || location.trim().isEmpty()) {
             locationErrMsg.setValue("Please enter a location");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         // Handle date parsing and validation logic
         if (dateString == null || dateString.trim().isEmpty()) {
             dateErrMsg.setValue("Please enter a date");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         LocalDate date;
@@ -149,13 +159,15 @@ public class AddEditHikeViewModel extends AndroidViewModel {
             date = LocalDate.parse(dateString, formatter);
         } catch (DateTimeParseException e) {
             dateErrMsg.setValue("Please enter date with correct format (DD/MM/YYYY)");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         // Handle length parsing and validation logic
         if (lengthString == null || lengthString.trim().isEmpty()) {
             lengthErrMsg.setValue("Please enter the length of the hike");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         double length;
@@ -163,11 +175,13 @@ public class AddEditHikeViewModel extends AndroidViewModel {
             length = Double.parseDouble(lengthString);
             if (length <= 0) {
                 lengthErrMsg.setValue("Please enter a positive number for length");
-                return false;
+                isHikeUpdated.setValue(false);
+                return;
             }
         } catch (NumberFormatException e) {
             lengthErrMsg.setValue("Please enter a valid number for length");
-            return false;
+            isHikeUpdated.setValue(false);
+            return;
         }
 
         // Handle parking available parsing
@@ -184,7 +198,9 @@ public class AddEditHikeViewModel extends AndroidViewModel {
                 description == null ? "" : description.trim()
         );
 
-        long id = databaseHelper.updateHike(hike);
-        return id != -1;
+        new Thread (() -> {
+            long id = databaseHelper.updateHike(hike);
+            isHikeUpdated.setValue(id != -1);
+        }).start();
     }
 }

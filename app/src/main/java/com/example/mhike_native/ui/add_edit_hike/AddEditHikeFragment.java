@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentAddEditBinding;
+import com.example.mhike_native.ui.hikes.HikesViewModel;
 
 import java.util.Calendar;
 
@@ -27,8 +28,32 @@ public class AddEditHikeFragment extends Fragment {
         addHikeViewModel = new ViewModelProvider(this).get(AddEditHikeViewModel.class);
 
         binding = FragmentAddEditBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        return binding.getRoot();
+        addHikeViewModel.getIsHikeAdded().observe(getViewLifecycleOwner(), isAdded -> {
+            HikesViewModel hikesViewModel = new ViewModelProvider(requireActivity()).get(HikesViewModel.class);
+            hikesViewModel.loadAllHikes();
+            Toast.makeText(getContext(), isAdded ? "Hike added successfully!" : "Failed to add hike. Please try again.", Toast.LENGTH_SHORT).show();
+        });
+        addHikeViewModel.getIsHikeUpdated().observe(getViewLifecycleOwner(), isUpdated -> {
+            HikesViewModel hikesViewModel = new ViewModelProvider(requireActivity()).get(HikesViewModel.class);
+            hikesViewModel.loadAllHikes();
+            Toast.makeText(getContext(), isUpdated ? "Hike updated successfully!" : "Failed to update hike. Please try again.", Toast.LENGTH_SHORT).show();
+        });
+        addHikeViewModel.getHikeNameErrMsg().observe(getViewLifecycleOwner(), hikeNameErrMsg -> {
+            Toast.makeText(getContext(), hikeNameErrMsg, Toast.LENGTH_SHORT).show();
+        });
+        addHikeViewModel.getLocationErrMsg().observe(getViewLifecycleOwner(), locationErrMsg -> {
+            Toast.makeText(getContext(), locationErrMsg, Toast.LENGTH_SHORT).show();
+        });
+        addHikeViewModel.getDateErrMsg().observe(getViewLifecycleOwner(), dateErrMsg -> {
+            Toast.makeText(getContext(), dateErrMsg, Toast.LENGTH_SHORT).show();
+        });
+        addHikeViewModel.getLengthErrMsg().observe(getViewLifecycleOwner(), lengthErrMsg -> {
+            Toast.makeText(getContext(), lengthErrMsg, Toast.LENGTH_SHORT).show();
+        });
+
+        return root;
     }
 
     @Override
@@ -93,9 +118,8 @@ public class AddEditHikeFragment extends Fragment {
         String description = binding.editTextDescription.getText().toString();
 
         // Call ViewModel method to add the hike
-        boolean isHikeCreated = addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
+        addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
 
-        Toast.makeText(getContext(), isHikeCreated ? "Hike added successfully!" : "Failed to add hike. Please try again.", Toast.LENGTH_SHORT).show();
         onClickedResetBtn();
     }
 

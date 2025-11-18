@@ -23,7 +23,7 @@ public class HikesFragment extends Fragment implements HikeAdapter.OnHikeListene
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HikesViewModel hikesViewModel =
-                new ViewModelProvider(this).get(HikesViewModel.class);
+                new ViewModelProvider(requireActivity()).get(HikesViewModel.class);
 
         binding = FragmentAllHikesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

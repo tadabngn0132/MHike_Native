@@ -28,8 +28,10 @@ public class HikesViewModel extends AndroidViewModel {
         return hikesLiveData;
     }
 
-    private void loadAllHikes() {
-        List<Hike> hikeList = databaseHelper.getAllHikes();
-        hikesLiveData.setValue(hikeList);
+    public void loadAllHikes() {
+        new Thread(() -> {
+            List<Hike> hikeList = databaseHelper.getAllHikes();
+            hikesLiveData.postValue(hikeList);
+        }).start();
     }
 }
