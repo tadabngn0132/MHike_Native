@@ -34,6 +34,12 @@
             android:name="hikeId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_hikeDetailsFragment_to_addEditObservationFragment"
+            app:destination="@id/addEditObservationFragment" />
+        <action
+            android:id="@+id/action_hikeDetailsFragment_to_observationDetailsFragment"
+            app:destination="@id/observationDetailsFragment" />
     </fragment>
 
     <fragment
@@ -59,4 +65,34 @@
         android:name="com.example.mhike_native.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/addEditObservationFragment"
+        android:name="com.example.mhike_native.ui.add_edit_observation.AddEditObservationFragment"
+        android:label="fragment_add_edit_observation"
+        tools:layout="@layout/fragment_add_edit_observation" >
+        <argument
+            android:name="observationId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument android:name="hikeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+    <fragment
+        android:id="@+id/observationDetailsFragment"
+        android:name="com.example.mhike_native.ui.observation_details.ObservationDetailsFragment"
+        android:label="fragment_observation_details"
+        tools:layout="@layout/fragment_observation_details" >
+        <action
+            android:id="@+id/action_observationDetailsFragment_to_addEditObservationFragment"
+            app:destination="@id/addEditObservationFragment" />
+        <argument
+            android:name="observationId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="hikeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
 </navigation>

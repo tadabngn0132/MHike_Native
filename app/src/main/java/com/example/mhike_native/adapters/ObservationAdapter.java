@@ -29,12 +29,12 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
 
     public static class ObservationViewHolder extends RecyclerView.ViewHolder {
         android.widget.TextView tvObservationName;
-        android.widget.TextView tvObservationDate;
+        android.widget.TextView tvObservationTimestamp;
         android.widget.TextView tvComments;
         public ObservationViewHolder(@NonNull View itemView) {
             super(itemView);
             tvObservationName = itemView.findViewById(R.id.tvObservationName);
-            tvObservationDate = itemView.findViewById(R.id.tvObservationDate);
+            tvObservationTimestamp = itemView.findViewById(R.id.tvObservationTimestamp);
             tvComments = itemView.findViewById(R.id.tvComments);
         }
     }
@@ -50,7 +50,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     public void onBindViewHolder(@NonNull ObservationViewHolder holder, int position) {
         Observation observation = observationList.get(position);
         holder.tvObservationName.setText(observation.getTitle());
-        holder.tvObservationDate.setText(observation.getTimestamp().toString());
+        holder.tvObservationTimestamp.setText(observation.getTimestamp().toString());
         holder.tvComments.setText(observation.getComments());
 
         holder.itemView.setOnClickListener(v -> {
