@@ -11,17 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentAddEditBinding;
+import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class AddEditHikeFragment extends Fragment {
 
     private FragmentAddEditBinding binding;
     private AddEditHikeViewModel addHikeViewModel;
+    long hikeId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +44,8 @@ public class AddEditHikeFragment extends Fragment {
             HikesViewModel hikesViewModel = new ViewModelProvider(requireActivity()).get(HikesViewModel.class);
             hikesViewModel.loadAllHikes();
             Toast.makeText(getContext(), isUpdated ? "Hike updated successfully!" : "Failed to update hike. Please try again.", Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.action_navigation_add_hike_to_navigation_hikes);
         });
         addHikeViewModel.getHikeNameErrMsg().observe(getViewLifecycleOwner(), hikeNameErrMsg -> {
             Toast.makeText(getContext(), hikeNameErrMsg, Toast.LENGTH_SHORT).show();
@@ -53,13 +60,28 @@ public class AddEditHikeFragment extends Fragment {
             Toast.makeText(getContext(), lengthErrMsg, Toast.LENGTH_SHORT).show();
         });
 
-        long hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
+        // Set up the difficulty and parking available spinners
+        // Difficulty Spinner
+        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.difficulty_options, android.R.layout.simple_spinner_item);
+        binding.spinnerDifficulty.setAdapter(difficultyAdapter);
+        // Parking Available Spinner
+        ArrayAdapter<CharSequence> parkingAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.parking_available, android.R.layout.simple_spinner_item);
+        binding.spinnerParkingAvailable.setAdapter(parkingAdapter);
+
+        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
         if (hikeId == -1) {
             binding.btnAdd.setText(R.string.btn_add_hike);
         } else {
             binding.btnAdd.setText(R.string.btn_update_hike);
+            Hike hike = addHikeViewModel.getHikeById(hikeId);
 
-
+            binding.editTextHikeName.setText(hike.getName());
+            binding.editTextLocation.setText(hike.getLocation());
+            binding.editTextDate.setText(hike.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            binding.editTextLength.setText(String.valueOf(hike.getLength_km()));
+            binding.spinnerDifficulty.setSelection(hike.getDifficulty().equalsIgnoreCase("Easy") ? 0 : hike.getDifficulty().equalsIgnoreCase("Moderate") ? 1 : 2);
+            binding.spinnerParkingAvailable.setSelection(hike.isParking_available() ? 0 : 1);
+            binding.editTextDescription.setText(hike.getDescription());
         }
 
         return root;
@@ -92,14 +114,6 @@ public class AddEditHikeFragment extends Fragment {
         // Set up button click listeners
         binding.btnAdd.setOnClickListener(v -> onClickedAddHikeBtn());
         binding.btnReset.setOnClickListener(v -> onClickedResetBtn());
-
-        // Set up the difficulty and parking available spinners
-        // Difficulty Spinner
-        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.difficulty_options, android.R.layout.simple_spinner_item);
-        binding.spinnerDifficulty.setAdapter(difficultyAdapter);
-        // Parking Available Spinner
-        ArrayAdapter<CharSequence> parkingAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.parking_available, android.R.layout.simple_spinner_item);
-        binding.spinnerParkingAvailable.setAdapter(parkingAdapter);
     }
 
     @Override
@@ -126,8 +140,13 @@ public class AddEditHikeFragment extends Fragment {
 
         String description = binding.editTextDescription.getText().toString();
 
-        // Call ViewModel method to add the hike
-        addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
+        if (hikeId != -1) {
+            // Call ViewModel method to update the hike
+            addHikeViewModel.updateHike(hikeId, name, location, date, length, difficulty, parkingAvailable, description);
+        } else {
+            // Call ViewModel method to add the hike
+            addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
+        }
 
         onClickedResetBtn();
     }

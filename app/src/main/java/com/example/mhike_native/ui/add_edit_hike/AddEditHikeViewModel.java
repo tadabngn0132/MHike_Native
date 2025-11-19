@@ -131,7 +131,7 @@ public class AddEditHikeViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public void updateHike(String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
+    public void updateHike(long id, String name, String location, String dateString, String lengthString, String difficulty, String parkingAvailableString, String description) {
 
         // Validate required fields
         if (name == null || name.trim().isEmpty()) {
@@ -189,6 +189,7 @@ public class AddEditHikeViewModel extends AndroidViewModel {
 
         // Create Hike object and update in database
         Hike hike = new Hike(
+                id,
                 name.trim(),
                 location.trim(),
                 date,
@@ -199,8 +200,12 @@ public class AddEditHikeViewModel extends AndroidViewModel {
         );
 
         new Thread (() -> {
-            long id = databaseHelper.updateHike(hike);
-            isHikeUpdated.setValue(id != -1);
+            long updatedHikeId = databaseHelper.updateHike(hike);
+            isHikeUpdated.postValue(updatedHikeId != -1);
         }).start();
+    }
+
+    public Hike getHikeById(long hikeId) {
+        return databaseHelper.getHikeById(hikeId);
     }
 }

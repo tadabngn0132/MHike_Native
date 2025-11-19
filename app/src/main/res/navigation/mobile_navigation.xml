@@ -45,6 +45,9 @@
             android:name="hikeId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_navigation_add_hike_to_navigation_hikes"
+            app:destination="@id/navigation_hikes" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
