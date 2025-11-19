@@ -32,7 +32,28 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        navView.setOnItemSelectedListener(item -> NavigationUI.onNavDestinationSelected(item, navController));
+        navView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.navigation_home) {
+                navController.popBackStack(R.id.navigation_home, false);
+                navController.navigate(R.id.navigation_home);
+                return true;
+            } else if (itemId == R.id.navigation_hikes) {
+                navController.popBackStack(R.id.navigation_hikes, false);
+                navController.navigate(R.id.navigation_hikes);
+                return true;
+            } else if (itemId == R.id.navigation_add_hike) {
+                navController.popBackStack(R.id.navigation_add_hike, false);
+                navController.navigate(R.id.navigation_add_hike);
+                return true;
+            } else if (itemId == R.id.navigation_profile) {
+                navController.popBackStack(R.id.navigation_profile, false);
+                navController.navigate(R.id.navigation_profile);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
