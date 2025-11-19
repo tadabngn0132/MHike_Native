@@ -1,5 +1,72 @@
 package com.example.mhike_native.adapters;
 
-public class ObservationAdapter {
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mhike_native.R;
+import com.example.mhike_native.models.Observation;
+
+import org.jspecify.annotations.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.ObservationViewHolder> {
+    private List<Observation> observationList = new ArrayList<>();
+
+    public interface OnObservationListener {
+        void onObservationClicked(long observationId);
+    }
+
+    private OnObservationListener onObservationListener;
+
+    public void setOnClickedObservationListener(OnObservationListener listener) {
+        this.onObservationListener = listener;
+    }
+
+    public static class ObservationViewHolder extends RecyclerView.ViewHolder {
+        android.widget.TextView tvObservationName;
+        android.widget.TextView tvObservationDate;
+        android.widget.TextView tvComments;
+        public ObservationViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvObservationName = itemView.findViewById(R.id.tvObservationName);
+            tvObservationDate = itemView.findViewById(R.id.tvObservationDate);
+            tvComments = itemView.findViewById(R.id.tvComments);
+        }
+    }
+
+    @NonNull
+    @Override
+    public ObservationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_observation, parent, false);
+        return new ObservationViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ObservationViewHolder holder, int position) {
+        Observation observation = observationList.get(position);
+        holder.tvObservationName.setText(observation.getTitle());
+        holder.tvObservationDate.setText(observation.getTimestamp().toString());
+        holder.tvComments.setText(observation.getComments());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onObservationListener != null) {
+                onObservationListener.onObservationClicked(observation.getId());
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return observationList.size();
+    }
+
+    public void setObservationList(List<Observation> observations) {
+        this.observationList = observations;
+        notifyDataSetChanged();
+    }
 }
