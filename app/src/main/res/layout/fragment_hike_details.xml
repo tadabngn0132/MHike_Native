@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="Name"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Date"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsLocation" />
@@ -68,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Length"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDate" />
@@ -108,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Description"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsParkingAvailable" />
@@ -118,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Parking Available"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsDifficulty" />
@@ -138,6 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Difficulty"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,6 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Location"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHikeDetailsName" />
@@ -156,9 +163,9 @@
         <Button
             android:id="@+id/btnUpdate"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginEnd="16dp"
-            android:text="Update"
+            android:text="Update Hike"
             app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
             app:layout_constraintEnd_toStartOf="@+id/btnDelete"
@@ -169,10 +176,10 @@
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Delete"
+            android:text="Delete Hike"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -182,11 +189,14 @@
         <TextView
             android:id="@+id/tvObservationList"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
             android:text="Observations"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnAddObservation"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
 
@@ -200,6 +210,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvObservationList"
             tools:listitem="@layout/item_observation" />
+
+        <Button
+            android:id="@+id/btnAddObservation"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:drawableLeft="@drawable/ic_add_white_24dp"
+            android:gravity="start|center_vertical"
+            android:text="Add"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvObservationList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvObservationList"
+            app:layout_constraintTop_toTopOf="@+id/tvObservationList" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

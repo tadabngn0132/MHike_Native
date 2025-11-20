@@ -15,7 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.mhike_native.R;
-import com.example.mhike_native.databinding.FragmentAddEditBinding;
+import com.example.mhike_native.databinding.FragmentAddEditHikeBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
 
@@ -24,7 +24,7 @@ import java.util.Calendar;
 
 public class AddEditHikeFragment extends Fragment {
 
-    private FragmentAddEditBinding binding;
+    private FragmentAddEditHikeBinding binding;
     private AddEditHikeViewModel addHikeViewModel;
     long hikeId;
 
@@ -32,7 +32,7 @@ public class AddEditHikeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         addHikeViewModel = new ViewModelProvider(this).get(AddEditHikeViewModel.class);
 
-        binding = FragmentAddEditBinding.inflate(inflater, container, false);
+        binding = FragmentAddEditHikeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         addHikeViewModel.getIsHikeAdded().observe(getViewLifecycleOwner(), isAdded -> {
