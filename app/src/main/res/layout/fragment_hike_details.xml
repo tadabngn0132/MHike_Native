@@ -195,7 +195,7 @@
             android:gravity="center_vertical"
             android:text="Observations"
             android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/btnAddObservation"
+            app:layout_constraintEnd_toStartOf="@+id/btnToAddObservation"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
@@ -212,7 +212,7 @@
             tools:listitem="@layout/item_observation" />
 
         <Button
-            android:id="@+id/btnAddObservation"
+            android:id="@+id/btnToAddObservation"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:drawableLeft="@drawable/ic_add_white_24dp"

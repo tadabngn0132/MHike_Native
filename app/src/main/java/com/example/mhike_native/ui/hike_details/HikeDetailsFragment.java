@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mhike_native.R;
+import com.example.mhike_native.adapters.ObservationAdapter;
 import com.example.mhike_native.databinding.FragmentHikeDetailsBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
 
-public class HikeDetailsFragment extends Fragment {
+public class HikeDetailsFragment extends Fragment implements ObservationAdapter.OnObservationListener {
 
     private FragmentHikeDetailsBinding binding;
     private HikeDetailsViewModel hikeDetailsViewModel;
@@ -46,6 +48,12 @@ public class HikeDetailsFragment extends Fragment {
         binding.tvHikeDetailsParkingAvailable.setText(parkingAvailableString);
         binding.tvHikeDetailsDescription.setText(hike.getDescription());
 
+        ObservationAdapter observationAdapter = new ObservationAdapter();
+        observationAdapter.setOnClickedObservationListener(this);
+        binding.recyclerViewObservations.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerViewObservations.setAdapter(observationAdapter);
+        hikeDetailsViewModel.getObservationsForHike(hikeId).observe(getViewLifecycleOwner(), observationAdapter::setObservationList);
+
         return root;
     }
 
@@ -57,10 +65,21 @@ public class HikeDetailsFragment extends Fragment {
         if (hikeId != -1) {
             binding.btnDelete.setOnClickListener(v -> onDeleteButtonClick(hikeId));
             binding.btnUpdate.setOnClickListener(v -> onUpdateButtonClick(hikeId));
+            binding.btnToAddObservation.setOnClickListener(v -> onAddObservationButtonClick());
         } else {
             binding.btnDelete.setEnabled(false);
             binding.btnUpdate.setEnabled(false);
+            binding.btnToAddObservation.setEnabled(false);
         }
+    }
+
+    @Override
+    public void onObservationClicked(long observationId, long hikeId) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("observationId", observationId);
+        bundle.putLong("hikeId", hikeId);
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.action_hikeDetailsFragment_to_observationDetailsFragment, bundle);
     }
 
     @Override
@@ -85,5 +104,12 @@ public class HikeDetailsFragment extends Fragment {
         bundle.putLong("hikeId", hikeId);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigate(R.id.action_hikeDetailsFragment_to_navigation_add_hike, bundle);
+    }
+
+    private void onAddObservationButtonClick() {
+        Bundle bundle = new Bundle();
+        bundle.putLong("hikeId", hikeId);
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.action_hikeDetailsFragment_to_addEditObservationFragment, bundle);
     }
 }

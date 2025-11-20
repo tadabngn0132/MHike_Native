@@ -25,7 +25,7 @@ public class AddEditHikeViewModel extends AndroidViewModel {
 
     public AddEditHikeViewModel(@NonNull Application application) {
         super(application);
-        this.databaseHelper = new DatabaseHelper(getApplication());
+        this.databaseHelper = new DatabaseHelper(application);
         this.hikeNameErrMsg = new MutableLiveData<>();
         this.locationErrMsg = new MutableLiveData<>();
         this.dateErrMsg = new MutableLiveData<>();

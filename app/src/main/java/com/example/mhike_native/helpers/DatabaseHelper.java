@@ -129,9 +129,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return hikeList;
     }
 
-    public List<Observation> getAllObservations() {
+    public List<Observation> getAllObservationsByHikeId(long hikeId) {
         List<Observation> observationList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS;
+        String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS + " WHERE " + KEY_HIKE_ID + " = " + hikeId;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

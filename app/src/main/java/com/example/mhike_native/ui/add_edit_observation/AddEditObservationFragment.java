@@ -13,26 +13,41 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mhike_native.R;
+import com.example.mhike_native.databinding.FragmentAddEditObservationBinding;
 
 public class AddEditObservationFragment extends Fragment {
 
-    private AddEditObservationViewModel mViewModel;
+    private FragmentAddEditObservationBinding binding;
+    private AddEditObservationViewModel addEditObservationViewModel;
 
     public static AddEditObservationFragment newInstance() {
         return new AddEditObservationFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_edit_observation, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        addEditObservationViewModel = new ViewModelProvider(this).get(AddEditObservationViewModel.class);
+
+        binding = FragmentAddEditObservationBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        binding.btnAddObservation.setOnClickListener(v -> onClickedAddObservationBtn());
+        binding.btnResetObservationForm.setOnClickListener(v -> onClickedResetBtn());
+
+        return root;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AddEditObservationViewModel.class);
-        // TODO: Use the ViewModel
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
+    private void onClickedAddObservationBtn() {
+
+    }
+
+    private void onClickedResetBtn() {
+
+    }
 }

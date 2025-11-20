@@ -18,7 +18,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     private List<Observation> observationList = new ArrayList<>();
 
     public interface OnObservationListener {
-        void onObservationClicked(long observationId);
+        void onObservationClicked(long observationId, long hikeId);
     }
 
     private OnObservationListener onObservationListener;
@@ -55,7 +55,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
 
         holder.itemView.setOnClickListener(v -> {
             if (onObservationListener != null) {
-                onObservationListener.onObservationClicked(observation.getId());
+                onObservationListener.onObservationClicked(observation.getId(), observation.getHike_id());
             }
         });
     }
