@@ -196,6 +196,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return observation;
     }
 
+    public Hike getHikeNameAndDateByHikeId(long hikeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT " + KEY_NAME + ", " + KEY_DATE + "FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(hikeId)});
+
+        Hike hike = null;
+        if (cursor.moveToFirst()) {
+            hike = new Hike();
+            hike.setName(cursor.getString(0));
+            hike.setDate(LocalDate.ofEpochDay(cursor.getLong(1)));
+        }
+
+        cursor.close();
+        db.close();
+        return hike;
+    }
+
     public long updateHike(Hike hike) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

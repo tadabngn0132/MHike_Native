@@ -74,6 +74,10 @@
             android:name="observationId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <argument
+            android:name="hikeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <fragment
         android:id="@+id/observationDetailsFragment"
@@ -85,6 +89,10 @@
             app:destination="@id/addEditObservationFragment" />
         <argument
             android:name="observationId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="hikeId"
             app:argType="long"
             android:defaultValue="-1L" />
     </fragment>

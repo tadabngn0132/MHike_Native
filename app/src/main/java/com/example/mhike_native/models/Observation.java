@@ -7,19 +7,19 @@ public class Observation {
     private String title;
     private LocalDateTime timestamp;
     private String comments;
-    private int hike_id;
+    private long hike_id;
 
     public Observation() {
     }
 
-    public Observation(String title, LocalDateTime timestamp, String comments, int hike_id) {
+    public Observation(String title, LocalDateTime timestamp, String comments, long hike_id) {
         this.title = title;
         this.timestamp = timestamp;
         this.comments = comments;
         this.hike_id = hike_id;
     }
 
-    public Observation(long id, String title, LocalDateTime timestamp, String comments, int hike_id) {
+    public Observation(long id, String title, LocalDateTime timestamp, String comments, long hike_id) {
         this.id = id;
         this.title = title;
         this.timestamp = timestamp;
@@ -59,11 +59,11 @@ public class Observation {
         this.comments = comments;
     }
 
-    public int getHike_id() {
+    public long getHike_id() {
         return hike_id;
     }
 
-    public void setHike_id(int hike_id) {
+    public void setHike_id(long hike_id) {
         this.hike_id = hike_id;
     }
 }

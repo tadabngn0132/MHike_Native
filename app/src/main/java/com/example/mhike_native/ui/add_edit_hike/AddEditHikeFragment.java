@@ -48,16 +48,16 @@ public class AddEditHikeFragment extends Fragment {
             navController.navigate(R.id.action_navigation_add_hike_to_navigation_hikes);
         });
         addHikeViewModel.getHikeNameErrMsg().observe(getViewLifecycleOwner(), hikeNameErrMsg -> {
-            Toast.makeText(getContext(), hikeNameErrMsg, Toast.LENGTH_SHORT).show();
+            binding.tvHikeNameErr.setText(hikeNameErrMsg);
         });
         addHikeViewModel.getLocationErrMsg().observe(getViewLifecycleOwner(), locationErrMsg -> {
-            Toast.makeText(getContext(), locationErrMsg, Toast.LENGTH_SHORT).show();
+            binding.tvLocationErr.setText(locationErrMsg);
         });
         addHikeViewModel.getDateErrMsg().observe(getViewLifecycleOwner(), dateErrMsg -> {
-            Toast.makeText(getContext(), dateErrMsg, Toast.LENGTH_SHORT).show();
+            binding.tvDateErr.setText(dateErrMsg);
         });
         addHikeViewModel.getLengthErrMsg().observe(getViewLifecycleOwner(), lengthErrMsg -> {
-            Toast.makeText(getContext(), lengthErrMsg, Toast.LENGTH_SHORT).show();
+            binding.tvLengthErr.setText(lengthErrMsg);
         });
 
         // Set up the difficulty and parking available spinners
@@ -71,8 +71,10 @@ public class AddEditHikeFragment extends Fragment {
         hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
         if (hikeId == -1) {
             binding.btnAdd.setText(R.string.btn_add_hike);
+            binding.btnReset.setText(R.string.btn_reset);
         } else {
             binding.btnAdd.setText(R.string.btn_update_hike);
+            binding.btnReset.setText(R.string.btn_cancel);
             Hike hike = addHikeViewModel.getHikeById(hikeId);
 
             binding.editTextHikeName.setText(hike.getName());
@@ -152,6 +154,11 @@ public class AddEditHikeFragment extends Fragment {
     }
 
     private void onClickedResetBtn() {
+        if (hikeId != -1) {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.popBackStack();
+            return;
+        }
         binding.editTextHikeName.setText("");
         binding.editTextLocation.setText("");
         binding.editTextDate.setText("");

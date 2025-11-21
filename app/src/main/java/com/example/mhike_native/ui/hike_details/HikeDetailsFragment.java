@@ -22,6 +22,8 @@ import com.example.mhike_native.databinding.FragmentHikeDetailsBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
 
+import java.time.format.DateTimeFormatter;
+
 public class HikeDetailsFragment extends Fragment implements ObservationAdapter.OnObservationListener {
 
     private FragmentHikeDetailsBinding binding;
@@ -40,7 +42,7 @@ public class HikeDetailsFragment extends Fragment implements ObservationAdapter.
         Hike hike = hikeDetailsViewModel.getHikeById(hikeId);
         binding.tvHikeDetailsName.setText(hike.getName());
         binding.tvHikeDetailsLocation.setText(hike.getLocation());
-        binding.tvHikeDetailsDate.setText(hike.getDate().toString());
+        binding.tvHikeDetailsDate.setText(hike.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         String lengthString = hike.getLength_km() + " km";
         binding.tvHikeDetailsLength.setText(lengthString);
         binding.tvHikeDetailsDifficulty.setText(hike.getDifficulty());
