@@ -78,6 +78,9 @@
             android:name="hikeId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_addEditObservationFragment_to_hikeDetailsFragment"
+            app:destination="@id/hikeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/observationDetailsFragment"

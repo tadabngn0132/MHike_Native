@@ -65,7 +65,11 @@ public class ObservationDetailsFragment extends Fragment {
     }
 
     private void onClickedDeleteObservationBtn() {
-        // TODO: Implement deletion logic here
+        boolean isDeletedObservation = observationDetailsViewModel.deleteObservation(observationId);
+        if (isDeletedObservation) {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.popBackStack();
+        }
     }
 
     private void onClickedUpdateObservationBtn() {

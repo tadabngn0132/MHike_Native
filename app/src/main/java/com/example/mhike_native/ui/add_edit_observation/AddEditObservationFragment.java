@@ -7,22 +7,29 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentAddEditObservationBinding;
+import com.example.mhike_native.models.Hike;
+import com.example.mhike_native.models.Observation;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class AddEditObservationFragment extends Fragment {
 
     private FragmentAddEditObservationBinding binding;
     private AddEditObservationViewModel addEditObservationViewModel;
-
-    public static AddEditObservationFragment newInstance() {
-        return new AddEditObservationFragment();
-    }
+    private long observationId;
+    private long hikeId;
+    private Hike hike;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,6 +37,42 @@ public class AddEditObservationFragment extends Fragment {
 
         binding = FragmentAddEditObservationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        addEditObservationViewModel.getIsObservationAdded().observe(getViewLifecycleOwner(), isAdded -> {
+            Toast.makeText(getContext(), isAdded ? "Observation added successfully!" : "Failed to add observation. Please try again.", Toast.LENGTH_SHORT).show();
+        });
+
+        addEditObservationViewModel.getIsObservationUpdated().observe(getViewLifecycleOwner(), isUpdated -> {
+            Bundle bundle = new Bundle();
+            bundle.putLong("hikeId", hikeId);
+            Toast.makeText(getContext(), isUpdated ? "Observation updated successfully!" : "Failed to update observation. Please try again.", Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.action_addEditObservationFragment_to_hikeDetailsFragment, bundle);
+        });
+
+        addEditObservationViewModel.getObservationNameErrMsg().observe(getViewLifecycleOwner(), observationNameErrMsg -> binding.tvObservationNameErr.setText(observationNameErrMsg));
+
+        addEditObservationViewModel.getTimestampErrMsg().observe(getViewLifecycleOwner(), timestampErrMsg -> binding.tvTimestampErr.setText(timestampErrMsg));
+
+        observationId = getArguments() != null ? getArguments().getLong("observationId", -1) : -1;
+        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
+
+        hike = addEditObservationViewModel.getHikeNameAndDateByHikeId(hikeId);
+
+        if (observationId == -1) {
+            binding.btnAddObservation.setText(R.string.btn_add_observation);
+            binding.btnResetObservationForm.setText(R.string.btn_reset);
+        } else {
+            binding.btnAddObservation.setText(R.string.btn_update_hike);
+            binding.btnResetObservationForm.setText(R.string.btn_cancel);
+
+            Observation observation = addEditObservationViewModel.getObservationById(observationId);
+
+            binding.editTextObservationName.setText(observation.getTitle());
+            String mergedTimestamp = observation.getTimestamp().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a", Locale.ENGLISH));
+            binding.editTextObservationTimestamp.setText(mergedTimestamp.substring(11));
+            binding.editTextComments.setText(observation.getComments());
+        }
 
         binding.btnAddObservation.setOnClickListener(v -> onClickedAddObservationBtn());
         binding.btnResetObservationForm.setOnClickListener(v -> onClickedResetBtn());
@@ -44,10 +87,27 @@ public class AddEditObservationFragment extends Fragment {
     }
 
     private void onClickedAddObservationBtn() {
+        String name = binding .editTextObservationName.getText().toString();
+        String timestamp = binding.editTextObservationTimestamp.getText().toString();
+        String comments = binding.editTextComments.getText().toString();
 
+        if (observationId != -1) {
+            addEditObservationViewModel.updateObservation(observationId, name, hike.getDate().toString(), timestamp, comments, hikeId);
+        } else {
+            addEditObservationViewModel.addObservation(name, hike.getDate().toString(), timestamp, comments, hikeId);
+            onClickedResetBtn();
+        }
     }
 
     private void onClickedResetBtn() {
+        if (observationId != -1) {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.popBackStack();
+            return;
+        }
 
+        binding.editTextObservationName.setText("");
+        binding.editTextObservationTimestamp.setText("");
+        binding.editTextComments.setText("");
     }
 }

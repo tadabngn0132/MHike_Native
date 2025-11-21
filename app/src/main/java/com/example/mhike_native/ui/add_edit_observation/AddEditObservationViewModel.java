@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.mhike_native.helpers.DatabaseHelper;
@@ -21,7 +22,6 @@ public class AddEditObservationViewModel extends AndroidViewModel {
     private final MutableLiveData<String> timestampErrMsg;
     private final MutableLiveData<Boolean> isObservationAdded;
     private final MutableLiveData<Boolean> isObservationUpdated;
-    private final MutableLiveData<Hike> hikeNameAndDateLiveData;
     private boolean hasEmptyError = false;
     private boolean hasFormatError = false;
     private LocalDateTime parsedTimestamp = null;
@@ -33,7 +33,6 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         this.timestampErrMsg = new MutableLiveData<>();
         this.isObservationAdded = new MutableLiveData<>();
         this.isObservationUpdated = new MutableLiveData<>();
-        this.hikeNameAndDateLiveData = new MutableLiveData<>();
     }
 
     public MutableLiveData<String> getObservationNameErrMsg() {
@@ -50,10 +49,6 @@ public class AddEditObservationViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getIsObservationUpdated() {
         return isObservationUpdated;
-    }
-
-    public MutableLiveData<Hike> getHikeNameAndDateLiveData() {
-        return hikeNameAndDateLiveData;
     }
 
     private void validateInputs(String name, String hikeDateString, String timestamp) {
@@ -114,14 +109,11 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public void getHikeNameAndDateByHikeId(long hikeId) {
-        new Thread(() -> {
-            Hike hike = databaseHelper.getHikeById(hikeId);
-            hikeNameAndDateLiveData.postValue(hike);
-        }).start();
+    public Hike getHikeNameAndDateByHikeId(long hikeId) {
+        return databaseHelper.getHikeById(hikeId);
     }
 
-    public void updateObservation(int id, String name, String hikeDateString, String timestamp, String comments, long hikeId) {
+    public void updateObservation(long id, String name, String hikeDateString, String timestamp, String comments, long hikeId) {
 
         // Validation required fields
         validateInputs(name, hikeDateString, timestamp);
@@ -145,4 +137,7 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         }).start();
     }
 
+    public Observation getObservationById(long observationId) {
+        return databaseHelper.getObservationById(observationId);
+    }
 }

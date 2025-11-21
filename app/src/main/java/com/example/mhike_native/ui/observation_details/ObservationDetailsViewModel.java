@@ -19,4 +19,9 @@ public class ObservationDetailsViewModel extends AndroidViewModel {
     public Observation getObservationById(long observationId) {
         return databaseHelper.getObservationById(observationId);
     }
+
+    public boolean deleteObservation(long observationId) {
+        long id = databaseHelper.deleteObservation(observationId);
+        return id != -1;
+    }
 }

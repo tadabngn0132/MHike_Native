@@ -28,6 +28,7 @@ public class AddEditHikeFragment extends Fragment {
     private AddEditHikeViewModel addHikeViewModel;
     long hikeId;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addHikeViewModel = new ViewModelProvider(this).get(AddEditHikeViewModel.class);
@@ -148,9 +149,8 @@ public class AddEditHikeFragment extends Fragment {
         } else {
             // Call ViewModel method to add the hike
             addHikeViewModel.addHike(name, location, date, length, difficulty, parkingAvailable, description);
+            onClickedResetBtn();
         }
-
-        onClickedResetBtn();
     }
 
     private void onClickedResetBtn() {
