@@ -94,7 +94,7 @@ public class HikeDetailsFragment extends Fragment implements ObservationAdapter.
     private void showConfirmAlertDialog(long hikeId) {
         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext());
         materialAlertDialogBuilder.setTitle("Confirm Deletion");
-        materialAlertDialogBuilder.setMessage("Are you sure you want to delete this hike?");
+        materialAlertDialogBuilder.setMessage("Are you sure you want to delete this hike? This action cannot be undone.");
         materialAlertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         materialAlertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
             onDeleteButtonClick(hikeId);

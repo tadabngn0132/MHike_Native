@@ -25,6 +25,8 @@ public class AddEditObservationViewModel extends AndroidViewModel {
     private boolean hasEmptyError = false;
     private boolean hasFormatError = false;
     private LocalDateTime parsedTimestamp = null;
+    private final MutableLiveData<Hike> hikeLiveData;
+    private final MutableLiveData<Observation> observationLiveData;
 
     public AddEditObservationViewModel(@NonNull Application application) {
         super(application);
@@ -33,6 +35,8 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         this.timestampErrMsg = new MutableLiveData<>();
         this.isObservationAdded = new MutableLiveData<>();
         this.isObservationUpdated = new MutableLiveData<>();
+        this.hikeLiveData = new MutableLiveData<>();
+        this.observationLiveData = new MutableLiveData<>();
     }
 
     public MutableLiveData<String> getObservationNameErrMsg() {
@@ -49,6 +53,14 @@ public class AddEditObservationViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getIsObservationUpdated() {
         return isObservationUpdated;
+    }
+
+    public MutableLiveData<Hike> getHikeLiveData() {
+        return hikeLiveData;
+    }
+
+    public MutableLiveData<Observation> getObservationLiveData() {
+        return observationLiveData;
     }
 
     private void validateInputs(String name, String hikeDateString, String timestamp) {
@@ -72,8 +84,10 @@ public class AddEditObservationViewModel extends AndroidViewModel {
 
         String mergedTimestamp = hikeDateString + " " + timestamp.trim();
 
+        System.out.println(mergedTimestamp);
+
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a", Locale.ENGLISH);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a", Locale.ENGLISH);
 
             parsedTimestamp = LocalDateTime.parse(mergedTimestamp.trim(), formatter);
 
@@ -109,8 +123,11 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public Hike getHikeNameAndDateByHikeId(long hikeId) {
-        return databaseHelper.getHikeById(hikeId);
+    public void getHikeNameAndDateByHikeId(long hikeId) {
+        new Thread(() -> {
+            Hike hike = databaseHelper.getHikeById(hikeId);
+            hikeLiveData.postValue(hike);
+        }).start();
     }
 
     public void updateObservation(long id, String name, String hikeDateString, String timestamp, String comments, long hikeId) {
@@ -137,7 +154,10 @@ public class AddEditObservationViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public Observation getObservationById(long observationId) {
-        return databaseHelper.getObservationById(observationId);
+    public void getObservationById(long observationId) {
+        new Thread(() -> {
+            Observation observation = databaseHelper.getObservationById(observationId);
+            observationLiveData.postValue(observation);
+        }).start();
     }
 }

@@ -22,6 +22,7 @@ import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.models.Observation;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
@@ -41,6 +42,37 @@ public class AddEditObservationFragment extends Fragment {
         binding = FragmentAddEditObservationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        observationId = getArguments() != null ? getArguments().getLong("observationId", -1) : -1;
+        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
+
+        addEditObservationViewModel.getHikeNameAndDateByHikeId(hikeId);
+
+        addEditObservationViewModel.getHikeLiveData().observe(getViewLifecycleOwner(), hikeWithNameAndDate -> {
+            if (hikeWithNameAndDate != null) {
+                this.hike = hikeWithNameAndDate;
+                binding.tvObservationHikeName.setText(hikeWithNameAndDate.getName());
+            }
+        });
+
+        if (observationId == -1) {
+            binding.btnAddObservation.setText(R.string.btn_add_observation);
+            binding.btnResetObservationForm.setText(R.string.btn_reset);
+        } else {
+            binding.btnAddObservation.setText(R.string.btn_update_hike);
+            binding.btnResetObservationForm.setText(R.string.btn_cancel);
+
+            addEditObservationViewModel.getObservationById(observationId);
+
+            addEditObservationViewModel.getObservationLiveData().observe(getViewLifecycleOwner(), observation -> {
+                if (observation != null) {
+                    binding.editTextObservationName.setText(observation.getTitle());
+                    String mergedTimestamp = observation.getTimestamp().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a", Locale.ENGLISH));
+                    binding.editTextObservationTimestamp.setText(mergedTimestamp.substring(11));
+                    binding.editTextComments.setText(observation.getComments());
+                }
+            });
+        }
+
         addEditObservationViewModel.getIsObservationAdded().observe(getViewLifecycleOwner(), isAdded -> {
             Toast.makeText(getContext(), isAdded ? "Observation added successfully!" : "Failed to add observation. Please try again.", Toast.LENGTH_SHORT).show();
         });
@@ -56,29 +88,6 @@ public class AddEditObservationFragment extends Fragment {
         addEditObservationViewModel.getObservationNameErrMsg().observe(getViewLifecycleOwner(), observationNameErrMsg -> binding.tvObservationNameErr.setText(observationNameErrMsg));
 
         addEditObservationViewModel.getTimestampErrMsg().observe(getViewLifecycleOwner(), timestampErrMsg -> binding.tvTimestampErr.setText(timestampErrMsg));
-
-        observationId = getArguments() != null ? getArguments().getLong("observationId", -1) : -1;
-        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
-
-        hike = addEditObservationViewModel.getHikeNameAndDateByHikeId(hikeId);
-
-        if (observationId == -1) {
-            binding.btnAddObservation.setText(R.string.btn_add_observation);
-            binding.btnResetObservationForm.setText(R.string.btn_reset);
-        } else {
-            binding.btnAddObservation.setText(R.string.btn_update_hike);
-            binding.btnResetObservationForm.setText(R.string.btn_cancel);
-
-            Observation observation = addEditObservationViewModel.getObservationById(observationId);
-
-            binding.editTextObservationName.setText(observation.getTitle());
-            String mergedTimestamp = observation.getTimestamp().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a", Locale.ENGLISH));
-            binding.editTextObservationTimestamp.setText(mergedTimestamp.substring(11));
-            binding.editTextComments.setText(observation.getComments());
-        }
-
-        binding.btnAddObservation.setOnClickListener(v -> onClickedAddObservationBtn());
-        binding.btnResetObservationForm.setOnClickListener(v -> onClickedResetBtn());
 
         return root;
     }
@@ -103,6 +112,9 @@ public class AddEditObservationFragment extends Fragment {
             );
             datePickerDialog.show();
         });
+
+        binding.btnAddObservation.setOnClickListener(v -> onClickedAddObservationBtn());
+        binding.btnResetObservationForm.setOnClickListener(v -> onClickedResetBtn());
     }
 
     @Override
@@ -116,11 +128,13 @@ public class AddEditObservationFragment extends Fragment {
         String timestamp = binding.editTextObservationTimestamp.getText().toString();
         String comments = binding.editTextComments.getText().toString();
 
-        if (observationId != -1) {
-            addEditObservationViewModel.updateObservation(observationId, name, hike.getDate().toString(), timestamp, comments, hikeId);
-        } else {
-            addEditObservationViewModel.addObservation(name, hike.getDate().toString(), timestamp, comments, hikeId);
-            onClickedResetBtn();
+        if (hike != null) {
+            if (observationId == -1) {
+                addEditObservationViewModel.updateObservation(observationId, name, hike.getDate().toString(), timestamp, comments, hikeId);
+            } else {
+                addEditObservationViewModel.addObservation(name, hike.getDate().toString(), timestamp, comments, hikeId);
+                onClickedResetBtn();
+            }
         }
     }
 

@@ -17,16 +17,14 @@ import android.view.ViewGroup;
 import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentObservationDetailsBinding;
 import com.example.mhike_native.models.Observation;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ObservationDetailsFragment extends Fragment {
 
     private FragmentObservationDetailsBinding binding;
     private ObservationDetailsViewModel observationDetailsViewModel;
     private long observationId = -1;
-
-    public static ObservationDetailsFragment newInstance() {
-        return new ObservationDetailsFragment();
-    }
+    private long hikeId = -1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,6 +33,7 @@ public class ObservationDetailsFragment extends Fragment {
         View root = binding.getRoot();
 
         observationId = getArguments() != null ? getArguments().getLong("observationId", -1) : -1;
+        hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
 
         Observation observation = observationDetailsViewModel.getObservationById(observationId);
         binding.tvObservationDetailsName.setText(observation.getTitle());
@@ -50,8 +49,8 @@ public class ObservationDetailsFragment extends Fragment {
 
         // Set up delete button click listener
         if (observationId != -1) {
-            binding.btnDeleteObservation.setOnClickListener(v -> onClickedDeleteObservationBtn());
-            binding.btnUpdateObservation.setOnClickListener(v -> onClickedUpdateObservationBtn());
+            binding.btnDeleteObservation.setOnClickListener(v -> showConfirmAlertDialog(observationId));
+            binding.btnUpdateObservation.setOnClickListener(v -> onClickedUpdateObservationBtn(observationId, hikeId));
         } else {
             binding.btnDeleteObservation.setEnabled(false);
             binding.btnUpdateObservation.setEnabled(false);
@@ -64,7 +63,7 @@ public class ObservationDetailsFragment extends Fragment {
         binding = null;
     }
 
-    private void onClickedDeleteObservationBtn() {
+    private void onClickedDeleteObservationBtn(long observationId) {
         boolean isDeletedObservation = observationDetailsViewModel.deleteObservation(observationId);
         if (isDeletedObservation) {
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
@@ -72,9 +71,21 @@ public class ObservationDetailsFragment extends Fragment {
         }
     }
 
-    private void onClickedUpdateObservationBtn() {
+    private void showConfirmAlertDialog(long observationId) {
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext());
+        materialAlertDialogBuilder.setTitle("Confirm Deletion");
+        materialAlertDialogBuilder.setMessage("Are you sure you want to delete this observation? This action cannot be undone.");
+        materialAlertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        materialAlertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
+            onClickedDeleteObservationBtn(observationId);
+        });
+        materialAlertDialogBuilder.show();
+    }
+
+    private void onClickedUpdateObservationBtn(long observationId, long hikeId) {
         Bundle bundle = new Bundle();
         bundle.putLong("observationId", observationId);
+        bundle.putLong("hikeId", hikeId);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigate(R.id.action_observationDetailsFragment_to_addEditObservationFragment, bundle);
     }
