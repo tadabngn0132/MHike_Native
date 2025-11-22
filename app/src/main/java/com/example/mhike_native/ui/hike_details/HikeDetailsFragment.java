@@ -21,6 +21,7 @@ import com.example.mhike_native.adapters.ObservationAdapter;
 import com.example.mhike_native.databinding.FragmentHikeDetailsBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.time.format.DateTimeFormatter;
 
@@ -65,7 +66,7 @@ public class HikeDetailsFragment extends Fragment implements ObservationAdapter.
 
         // Set up delete button click listener
         if (hikeId != -1) {
-            binding.btnDelete.setOnClickListener(v -> onDeleteButtonClick(hikeId));
+            binding.btnDelete.setOnClickListener(v -> showConfirmAlertDialog(hikeId));
             binding.btnUpdate.setOnClickListener(v -> onUpdateButtonClick(hikeId));
             binding.btnToAddObservation.setOnClickListener(v -> onAddObservationButtonClick());
         } else {
@@ -88,6 +89,17 @@ public class HikeDetailsFragment extends Fragment implements ObservationAdapter.
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void showConfirmAlertDialog(long hikeId) {
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext());
+        materialAlertDialogBuilder.setTitle("Confirm Deletion");
+        materialAlertDialogBuilder.setMessage("Are you sure you want to delete this hike?");
+        materialAlertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        materialAlertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
+            onDeleteButtonClick(hikeId);
+        });
+        materialAlertDialogBuilder.show();
     }
 
     private void onDeleteButtonClick(long hikeId) {

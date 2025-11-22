@@ -2,6 +2,7 @@ package com.example.mhike_native.ui.add_edit_observation;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,9 @@ import com.example.mhike_native.databinding.FragmentAddEditObservationBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.models.Observation;
 
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class AddEditObservationFragment extends Fragment {
@@ -78,6 +81,28 @@ public class AddEditObservationFragment extends Fragment {
         binding.btnResetObservationForm.setOnClickListener(v -> onClickedResetBtn());
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Calendar calendar = Calendar.getInstance();
+
+        binding.editTextObservationTimestamp.setOnClickListener(v -> {
+            TimePickerDialog datePickerDialog = new TimePickerDialog(
+                    requireContext(),
+                    (timeView, hourOfDay, minute) -> {
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        binding.editTextObservationTimestamp.setText(timeFormat.format(calendar.getTime()));
+                    },
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    false
+            );
+            datePickerDialog.show();
+        });
     }
 
     @Override

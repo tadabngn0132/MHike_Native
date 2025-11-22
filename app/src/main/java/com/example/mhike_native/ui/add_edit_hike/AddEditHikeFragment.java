@@ -1,5 +1,6 @@
 package com.example.mhike_native.ui.add_edit_hike;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,10 @@ import com.example.mhike_native.databinding.FragmentAddEditHikeBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
 
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AddEditHikeFragment extends Fragment {
 
@@ -97,22 +100,22 @@ public class AddEditHikeFragment extends Fragment {
         // Set up date picker for the date EditText
         Calendar calendar = Calendar.getInstance();
 
-//        binding.editTextDate.setOnClickListener(v -> {
-//            DatePickerDialog datePickerDialog = new DatePickerDialog(
-//                requireContext(),
-//                (dateView, year, month, dayOfMonth) -> {
-//                    calendar.set(Calendar.YEAR, year);
-//                    calendar.set(Calendar.MONTH, month);
-//                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-//                    binding.editTextDate.setText(dateFormat.format(calendar.getTime()));
-//                },
-//                calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-//            );
-//            datePickerDialog.show();
-//        });
+        binding.editTextDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (dateView, year, month, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    binding.editTextDate.setText(dateFormat.format(calendar.getTime()));
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.show();
+        });
 
         // Set up button click listeners
         binding.btnAdd.setOnClickListener(v -> onClickedAddHikeBtn());
