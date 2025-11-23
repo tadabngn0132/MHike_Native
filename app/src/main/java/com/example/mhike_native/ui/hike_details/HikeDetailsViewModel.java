@@ -19,7 +19,7 @@ public class HikeDetailsViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Observation>> observationsLiveData;
     public HikeDetailsViewModel(@NonNull Application application) {
         super(application);
-        this.databaseHelper = new DatabaseHelper(application);
+        this.databaseHelper = DatabaseHelper.getInstance(application);
         this.observationsLiveData = new MutableLiveData<>();
     }
 

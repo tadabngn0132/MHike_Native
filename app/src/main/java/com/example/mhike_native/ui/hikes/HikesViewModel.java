@@ -19,7 +19,7 @@ public class HikesViewModel extends AndroidViewModel {
 
     public HikesViewModel(@NonNull Application application) {
         super(application);
-        this.databaseHelper = new DatabaseHelper(application);
+        this.databaseHelper = DatabaseHelper.getInstance(application);
         this.hikesLiveData = new MutableLiveData<>();
         loadAllHikes();
     }

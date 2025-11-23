@@ -30,7 +30,7 @@ public class AddEditObservationViewModel extends AndroidViewModel {
 
     public AddEditObservationViewModel(@NonNull Application application) {
         super(application);
-        this.databaseHelper = new DatabaseHelper(application);
+        this.databaseHelper = DatabaseHelper.getInstance(application);
         this.observationNameErrMsg = new MutableLiveData<>();
         this.timestampErrMsg = new MutableLiveData<>();
         this.isObservationAdded = new MutableLiveData<>();
@@ -125,7 +125,7 @@ public class AddEditObservationViewModel extends AndroidViewModel {
 
     public void getHikeNameAndDateByHikeId(long hikeId) {
         new Thread(() -> {
-            Hike hike = databaseHelper.getHikeById(hikeId);
+            Hike hike = databaseHelper.getHikeNameAndDateByHikeId(hikeId);
             hikeLiveData.postValue(hike);
         }).start();
     }

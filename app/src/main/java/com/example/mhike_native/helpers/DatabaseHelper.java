@@ -3,8 +3,10 @@ package com.example.mhike_native.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.models.Observation;
@@ -38,8 +40,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TIMESTAMP = "timestamp";
     private static final String KEY_COMMENTS = "comments";
     private static final String KEY_HIKE_ID = "hike_id";
+    private static DatabaseHelper instance;
 
-    public DatabaseHelper(Context context) {
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -74,31 +84,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public long addHike(Hike hike) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, hike.getName());
-        values.put(KEY_LOCATION, hike.getLocation());
-        values.put(KEY_DATE, hike.getDate().toEpochDay());
-        values.put(KEY_PARKING_AVAILABLE, hike.isParking_available() ? 1 : 0);
-        values.put(KEY_LENGTH_KM, hike.getLength_km());
-        values.put(KEY_DIFFICULTY, hike.getDifficulty());
-        values.put(KEY_DESCRIPTION, hike.getDescription());
+        if (hike == null) {
+            Log.e("DatabaseHelper", "Hike is null");
+            return -1;
+        }
 
-        long id = db.insert(TABLE_HIKES, null, values);
-        db.close();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, hike.getName());
+            values.put(KEY_LOCATION, hike.getLocation());
+            values.put(KEY_DATE, hike.getDate().toEpochDay());
+            values.put(KEY_PARKING_AVAILABLE, hike.isParking_available() ? 1 : 0);
+            values.put(KEY_LENGTH_KM, hike.getLength_km());
+            values.put(KEY_DIFFICULTY, hike.getDifficulty());
+            values.put(KEY_DESCRIPTION, hike.getDescription());
+
+            id = db.insert(TABLE_HIKES, null, values);
+            if (id == -1) {
+                Log.e("DatabaseHelper", "Failed to insert hike");
+            } else {
+                Log.d("DatabaseHelper", "Hike added successfully with ID: " + id);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error adding hike", e);
+        } finally {
+            db.close();
+        }
+
         return id;
     }
 
     public long addObservation(Observation observation) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_TITLE, observation.getTitle());
-        values.put(KEY_TIMESTAMP, observation.getTimestamp().toEpochSecond(ZoneOffset.UTC));
-        values.put(KEY_COMMENTS, observation.getComments());
-        values.put(KEY_HIKE_ID, observation.getHike_id());
+        if (observation == null) {
+            Log.e("DatabaseHelper", "Observation is null");
+            return -1;
+        }
 
-        long id = db.insert(TABLE_OBSERVATIONS, null, values);
-        db.close();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_TITLE, observation.getTitle());
+            values.put(KEY_TIMESTAMP, observation.getTimestamp().toEpochSecond(ZoneOffset.UTC));
+            values.put(KEY_COMMENTS, observation.getComments());
+            values.put(KEY_HIKE_ID, observation.getHike_id());
+
+            id = db.insert(TABLE_OBSERVATIONS, null, values);
+            if (id == -1) {
+                Log.e("DatabaseHelper", "Failed to insert observation");
+            } else {
+                Log.d("DatabaseHelper", "Observation added successfully with ID: " + id);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error adding observation", e);
+        } finally {
+            db.close();
+        }
+
         return id;
     }
 
@@ -106,12 +152,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Hike> hikeList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_HIKES;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        try (SQLiteDatabase db = this.getReadableDatabase(); Cursor cursor = db.rawQuery(selectQuery, null)) {
 
-        if (cursor.moveToFirst()) {
-            do {
-                Hike hike = new Hike();
+            if (cursor.moveToFirst()) {
+                do {
+                    Hike hike = new Hike();
+                    hike.setId(cursor.getLong(0));
+                    hike.setName(cursor.getString(1));
+                    hike.setLocation(cursor.getString(2));
+                    hike.setDate(LocalDate.ofEpochDay(cursor.getLong(3)));
+                    hike.setParking_available(cursor.getInt(4) == 1);
+                    hike.setLength_km(cursor.getDouble(5));
+                    hike.setDifficulty(cursor.getString(6));
+                    hike.setDescription(cursor.getString(7));
+                    hikeList.add(hike);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error retrieving hikes", e);
+        }
+
+        return hikeList;
+    }
+
+    public List<Observation> getAllObservationsByHikeId(long hikeId) {
+        List<Observation> observationList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS + " WHERE " + KEY_HIKE_ID + " = " + hikeId;
+
+        try (SQLiteDatabase db = this.getReadableDatabase();
+             Cursor cursor = db.rawQuery(selectQuery, null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Observation observation = new Observation();
+                    observation.setId(cursor.getLong(0));
+                    observation.setTitle(cursor.getString(1));
+                    observation.setTimestamp(LocalDateTime.ofEpochSecond(cursor.getLong(2), 0, ZoneOffset.UTC));
+                    observation.setComments(cursor.getString(3));
+                    observation.setHike_id(cursor.getInt(4));
+                    observationList.add(observation);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error retrieving observations", e);
+        }
+
+        return observationList;
+    }
+
+    public Hike getHikeById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)});
+        Hike hike = new Hike();
+
+        try {
+            if (cursor.moveToFirst()) {
                 hike.setId(cursor.getLong(0));
                 hike.setName(cursor.getString(1));
                 hike.setLocation(cursor.getString(2));
@@ -120,59 +215,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 hike.setLength_km(cursor.getDouble(5));
                 hike.setDifficulty(cursor.getString(6));
                 hike.setDescription(cursor.getString(7));
-                hikeList.add(hike);
-            } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error retrieving hike by ID", e);
+        } finally {
+            cursor.close();
+            db.close();
         }
 
-        cursor.close();
-        db.close();
-        return hikeList;
-    }
-
-    public List<Observation> getAllObservationsByHikeId(long hikeId) {
-        List<Observation> observationList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS + " WHERE " + KEY_HIKE_ID + " = " + hikeId;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Observation observation = new Observation();
-                observation.setId(cursor.getLong(0));
-                observation.setTitle(cursor.getString(1));
-                observation.setTimestamp(LocalDateTime.ofEpochSecond(cursor.getLong(2), 0, ZoneOffset.UTC));
-                observation.setComments(cursor.getString(3));
-                observation.setHike_id(cursor.getInt(4));
-                observationList.add(observation);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return observationList;
-    }
-
-    public Hike getHikeById(long id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)});
-
-        Hike hike = null;
-        if (cursor.moveToFirst()) {
-            hike = new Hike();
-            hike.setId(cursor.getLong(0));
-            hike.setName(cursor.getString(1));
-            hike.setLocation(cursor.getString(2));
-            hike.setDate(LocalDate.ofEpochDay(cursor.getLong(3)));
-            hike.setParking_available(cursor.getInt(4) == 1);
-            hike.setLength_km(cursor.getDouble(5));
-            hike.setDifficulty(cursor.getString(6));
-            hike.setDescription(cursor.getString(7));
-        }
-
-        cursor.close();
-        db.close();
         return hike;
     }
 
@@ -180,80 +230,150 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT * FROM " +TABLE_OBSERVATIONS + " WHERE " + KEY_ID + " = ?";
         Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)});
+        Observation observation = new Observation();
 
-        Observation observation = null;
-        if (cursor.moveToFirst()) {
-            observation = new Observation();
-            observation.setId(cursor.getLong(0));
-            observation.setTitle(cursor.getString(1));
-            observation.setTimestamp(LocalDateTime.ofEpochSecond(cursor.getLong(2), 0, ZoneOffset.UTC));
-            observation.setComments(cursor.getString(3));
-            observation.setHike_id(cursor.getInt(4));
+        try {
+            if (cursor.moveToFirst()) {
+                observation.setId(cursor.getLong(0));
+                observation.setTitle(cursor.getString(1));
+                observation.setTimestamp(LocalDateTime.ofEpochSecond(cursor.getLong(2), 0, ZoneOffset.UTC));
+                observation.setComments(cursor.getString(3));
+                observation.setHike_id(cursor.getInt(4));
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error retrieving observation by ID", e);
+        } finally {
+            cursor.close();
+            db.close();
         }
 
-        cursor.close();
-        db.close();
         return observation;
     }
 
     public Hike getHikeNameAndDateByHikeId(long hikeId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT " + KEY_NAME + ", " + KEY_DATE + "FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
+        String selectQuery = "SELECT " + KEY_NAME + ", " + KEY_DATE + " FROM " + TABLE_HIKES + " WHERE " + KEY_ID + " = ?";
         Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(hikeId)});
 
-        Hike hike = null;
-        if (cursor.moveToFirst()) {
-            hike = new Hike();
-            hike.setName(cursor.getString(0));
-            hike.setDate(LocalDate.ofEpochDay(cursor.getLong(1)));
+        Hike hike = new Hike();
+
+        try {
+            if (cursor.moveToFirst()) {
+                hike.setName(cursor.getString(0));
+                hike.setDate(LocalDate.ofEpochDay(cursor.getLong(1)));
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "Error retrieving hike name and date by hike ID", e);
+        } finally {
+            cursor.close();
+            db.close();
         }
 
-        cursor.close();
-        db.close();
         return hike;
     }
 
     public long updateHike(Hike hike) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, hike.getName());
-        values.put(KEY_LOCATION, hike.getLocation());
-        values.put(KEY_DATE, hike.getDate().toEpochDay());
-        values.put(KEY_PARKING_AVAILABLE, hike.isParking_available() ? 1 : 0);
-        values.put(KEY_LENGTH_KM, hike.getLength_km());
-        values.put(KEY_DIFFICULTY, hike.getDifficulty());
-        values.put(KEY_DESCRIPTION, hike.getDescription());
+        if (hike == null) {
+            Log.e("DatabaseHelper", "Hike is null");
+            return -1;
+        }
 
-        long id = db.update(TABLE_HIKES, values, KEY_ID + " = ?", new String[]{String.valueOf(hike.getId())});
-        db.close();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, hike.getName());
+            values.put(KEY_LOCATION, hike.getLocation());
+            values.put(KEY_DATE, hike.getDate().toEpochDay());
+            values.put(KEY_PARKING_AVAILABLE, hike.isParking_available() ? 1 : 0);
+            values.put(KEY_LENGTH_KM, hike.getLength_km());
+            values.put(KEY_DIFFICULTY, hike.getDifficulty());
+            values.put(KEY_DESCRIPTION, hike.getDescription());
+
+            id = db.update(TABLE_HIKES, values, KEY_ID + " = ?", new String[]{String.valueOf(hike.getId())});
+            if (id == -1) {
+                Log.e("DatabaseHelper", "Failed to update hike");
+            } else {
+                Log.d("DatabaseHelper", "Hike updated successfully with ID: " + id);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error updating hike", e);
+        } finally {
+            db.close();
+        }
+
         return id;
     }
 
     public long updateObservation(Observation observation) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_TITLE, observation.getTitle());
-        values.put(KEY_TIMESTAMP, observation.getTimestamp().toEpochSecond(ZoneOffset.UTC));
-        values.put(KEY_COMMENTS, observation.getComments());
-        values.put(KEY_HIKE_ID, observation.getHike_id());
+        if (observation == null) {
+            Log.e("DatabaseHelper", "Observation is null");
+            return -1;
+        }
 
-        long id = db.update(TABLE_OBSERVATIONS, values, KEY_ID + " = ?", new String[]{String.valueOf(observation.getId())});
-        db.close();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id = -1;
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_TITLE, observation.getTitle());
+            values.put(KEY_TIMESTAMP, observation.getTimestamp().toEpochSecond(ZoneOffset.UTC));
+            values.put(KEY_COMMENTS, observation.getComments());
+            values.put(KEY_HIKE_ID, observation.getHike_id());
+
+            id = db.update(TABLE_OBSERVATIONS, values, KEY_ID + " = ?", new String[]{String.valueOf(observation.getId())});
+            if (id == -1) {
+                Log.e("DatabaseHelper", "Failed to update observation");
+            } else {
+                Log.d("DatabaseHelper", "Observation updated successfully with ID: " + id);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error updating observation", e);
+        } finally {
+            db.close();
+        }
+
         return id;
     }
 
     public long deleteHike(long id) {
+        if (id == -1) {
+            Log.e("DatabaseHelper", "Invalid hike ID");
+            return -1;
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
-        long deletedHikeId = db.delete(TABLE_HIKES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
-        db.delete(TABLE_OBSERVATIONS, KEY_HIKE_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
+        long deletedHikeId = -1;
+        try {
+            deletedHikeId = db.delete(TABLE_HIKES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+            db.delete(TABLE_OBSERVATIONS, KEY_HIKE_ID + " = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error deleting hike", e);
+        } finally {
+            db.close();
+        }
+
         return deletedHikeId;
     }
 
     public long deleteObservation(long id) {
+        if (id == -1) {
+            Log.e("DatabaseHelper", "Invalid observation ID");
+            return -1;
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
-        long deletedObservationId = db.delete(TABLE_OBSERVATIONS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
+        long deletedObservationId = -1;
+
+        try {
+            deletedObservationId = db.delete(TABLE_OBSERVATIONS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error deleting observation", e);
+        } finally {
+            db.close();
+        }
+
         return deletedObservationId;
     }
 }

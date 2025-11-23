@@ -14,7 +14,7 @@ public class ObservationDetailsViewModel extends AndroidViewModel {
 
     public ObservationDetailsViewModel(@NonNull Application application) {
         super(application);
-        this.databaseHelper = new DatabaseHelper(application);
+        this.databaseHelper = DatabaseHelper.getInstance(application);
     }
     public Observation getObservationById(long observationId) {
         return databaseHelper.getObservationById(observationId);
