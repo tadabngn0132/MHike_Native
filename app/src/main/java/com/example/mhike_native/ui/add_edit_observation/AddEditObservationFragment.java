@@ -55,9 +55,11 @@ public class AddEditObservationFragment extends Fragment {
         });
 
         if (observationId == -1) {
+            requireActivity().setTitle(R.string.label_title_add_observation);
             binding.btnAddObservation.setText(R.string.btn_add_observation);
             binding.btnResetObservationForm.setText(R.string.btn_reset);
         } else {
+            requireActivity().setTitle(R.string.label_title_edit_observation);
             binding.btnAddObservation.setText(R.string.btn_update_hike);
             binding.btnResetObservationForm.setText(R.string.btn_cancel);
 

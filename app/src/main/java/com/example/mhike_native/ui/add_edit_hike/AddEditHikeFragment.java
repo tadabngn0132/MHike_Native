@@ -74,9 +74,11 @@ public class AddEditHikeFragment extends Fragment {
 
         hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
         if (hikeId == -1) {
+            requireActivity().setTitle(R.string.label_title_add_hike);
             binding.btnAdd.setText(R.string.btn_add_hike);
             binding.btnReset.setText(R.string.btn_reset);
         } else {
+            requireActivity().setTitle(R.string.label_title_edit_hike);
             binding.btnAdd.setText(R.string.btn_update_hike);
             binding.btnReset.setText(R.string.btn_cancel);
             Hike hike = addHikeViewModel.getHikeById(hikeId);

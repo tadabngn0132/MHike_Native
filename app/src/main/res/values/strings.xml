@@ -41,4 +41,7 @@
     <string name="btn_update_hike">Save Changes</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_add_observation">Add Observation</string>
+    <string name="label_title_add_observation">Add New Observation</string>
+    <string name="label_title_edit_observation">Update Observation</string>
+    <string name="label_title_edit_hike">Update Hike</string>
 </resources>
