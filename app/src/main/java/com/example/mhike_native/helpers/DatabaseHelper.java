@@ -110,8 +110,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error adding hike", e);
-        } finally {
-            db.close();
         }
 
         return id;
@@ -141,8 +139,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error adding observation", e);
-        } finally {
-            db.close();
         }
 
         return id;
@@ -151,8 +147,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Hike> getAllHikes() {
         List<Hike> hikeList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_HIKES;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        try (SQLiteDatabase db = this.getReadableDatabase(); Cursor cursor = db.rawQuery(selectQuery, null)) {
+        try (Cursor cursor = db.rawQuery(selectQuery, null)) {
 
             if (cursor.moveToFirst()) {
                 do {
@@ -178,9 +175,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Observation> getAllObservationsByHikeId(long hikeId) {
         List<Observation> observationList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_OBSERVATIONS + " WHERE " + KEY_HIKE_ID + " = " + hikeId;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        try (SQLiteDatabase db = this.getReadableDatabase();
-             Cursor cursor = db.rawQuery(selectQuery, null)) {
+        try (Cursor cursor = db.rawQuery(selectQuery, null)) {
             if (cursor.moveToFirst()) {
                 do {
                     Observation observation = new Observation();
@@ -220,7 +217,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("DatabaseHelper", "Error retrieving hike by ID", e);
         } finally {
             cursor.close();
-            db.close();
         }
 
         return hike;
@@ -244,7 +240,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("DatabaseHelper", "Error retrieving observation by ID", e);
         } finally {
             cursor.close();
-            db.close();
         }
 
         return observation;
@@ -266,7 +261,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("DatabaseHelper", "Error retrieving hike name and date by hike ID", e);
         } finally {
             cursor.close();
-            db.close();
         }
 
         return hike;
@@ -299,8 +293,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error updating hike", e);
-        } finally {
-            db.close();
         }
 
         return id;
@@ -330,8 +322,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error updating observation", e);
-        } finally {
-            db.close();
         }
 
         return id;
@@ -350,8 +340,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_OBSERVATIONS, KEY_HIKE_ID + " = ?", new String[]{String.valueOf(id)});
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error deleting hike", e);
-        } finally {
-            db.close();
         }
 
         return deletedHikeId;
@@ -370,8 +358,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             deletedObservationId = db.delete(TABLE_OBSERVATIONS, KEY_ID + " = ?", new String[]{String.valueOf(id)});
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error deleting observation", e);
-        } finally {
-            db.close();
         }
 
         return deletedObservationId;

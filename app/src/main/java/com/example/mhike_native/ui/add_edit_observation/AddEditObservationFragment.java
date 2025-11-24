@@ -129,7 +129,7 @@ public class AddEditObservationFragment extends Fragment {
         String comments = binding.editTextComments.getText().toString();
 
         if (hike != null) {
-            if (observationId == -1) {
+            if (observationId != -1) {
                 addEditObservationViewModel.updateObservation(observationId, name, hike.getDate().toString(), timestamp, comments, hikeId);
             } else {
                 addEditObservationViewModel.addObservation(name, hike.getDate().toString(), timestamp, comments, hikeId);
