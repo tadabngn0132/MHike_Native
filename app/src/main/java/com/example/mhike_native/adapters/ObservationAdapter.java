@@ -11,6 +11,7 @@ import com.example.mhike_native.models.Observation;
 
 import org.jspecify.annotations.NonNull;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class ObservationAdapter extends RecyclerView.Adapter<ObservationAdapter.
     public void onBindViewHolder(@NonNull ObservationViewHolder holder, int position) {
         Observation observation = observationList.get(position);
         holder.tvObservationName.setText(observation.getTitle());
-        holder.tvObservationTimestamp.setText(observation.getTimestamp().toString());
+        holder.tvObservationTimestamp.setText(observation.getTimestamp().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a")));
         holder.tvComments.setText(observation.getComments());
 
         holder.itemView.setOnClickListener(v -> {
