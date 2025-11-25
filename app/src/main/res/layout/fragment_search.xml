@@ -137,7 +137,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/editTextSearchMaxLength" />
 
                 <RadioGroup
-                    android:id="@+id/radioGroup"
+                    android:id="@+id/rdgDifficulty"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -179,14 +179,15 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+                    app:layout_constraintTop_toBottomOf="@+id/rdgDifficulty" />
 
                 <RadioGroup
+                    android:id="@+id/rdgParkingAvailable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView15">
@@ -221,13 +222,13 @@
             android:text="Filters"
             android:textColor="@color/design_default_color_on_secondary"
             android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/btnClear"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnClear"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
@@ -254,6 +255,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSearchHikes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

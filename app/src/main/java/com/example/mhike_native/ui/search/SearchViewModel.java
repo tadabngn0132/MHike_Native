@@ -1,18 +1,34 @@
 package com.example.mhike_native.ui.search;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SearchViewModel extends ViewModel {
-    private final MutableLiveData<String> mText;
+import com.example.mhike_native.helpers.DatabaseHelper;
+import com.example.mhike_native.models.Hike;
 
-    public SearchViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is search fragment");
+import java.util.List;
+
+public class SearchViewModel extends ViewModel {
+    private final DatabaseHelper databaseHelper;
+    private final MutableLiveData<List<Hike>> hikesLiveData;
+
+    public SearchViewModel(@NonNull Application application) {
+        databaseHelper = DatabaseHelper.getInstance(application);
+        hikesLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Hike>> getHikesLiveData(){
+        return hikesLiveData;
+    }
+
+    public void searchHikes(String nameKeyWord, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
+        new Thread(() -> {
+            List<Hike> hikes = databaseHelper.searchHikes(nameKeyWord, location, date, minLength, maxLength, difficulty, parkingAvailable);
+            hikesLiveData.setValue(hikes);
+        }).start();
     }
 }

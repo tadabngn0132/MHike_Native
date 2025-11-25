@@ -362,4 +362,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return deletedObservationId;
     }
+
+    public List<Hike> searchHikes(String name, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
+        // Implementation of search logic based on provided criteria
+        return null;
+    }
 }
