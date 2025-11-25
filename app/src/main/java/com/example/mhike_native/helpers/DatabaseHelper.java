@@ -364,7 +364,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<Hike> searchHikes(String name, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
-        // Implementation of search logic based on provided criteria
-        return null;
+        List<Hike> hikeList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE 1=1";
+
+        if (name != null && !name.isEmpty()) {
+            selectQuery += " AND " + KEY_NAME + " LIKE '%" + name + "%'";
+        }
+
+        if (location != null && !location.isEmpty()) {
+            selectQuery += " AND " + KEY_LOCATION + " LIKE '%" + location + "%'";
+        }
+
+        if (date != null && !date.isEmpty()) {
+            LocalDate localDate = LocalDate.parse(date);
+            long epochDay = localDate.toEpochDay();
+            selectQuery += " AND " + KEY_DATE + " = " + epochDay;
+        }
+
+        if (minLength != null) {
+            selectQuery += " AND " + KEY_LENGTH_KM + " >= " + minLength;
+        }
+
+        if (maxLength != null) {
+            selectQuery += " AND " + KEY_LENGTH_KM + " <= " + maxLength;
+        }
+
+        if (difficulty != null && !difficulty.isEmpty()) {
+            selectQuery += " AND " + KEY_DIFFICULTY + " = '" + difficulty + "'";
+        }
+
+        if (parkingAvailable != null) {
+            selectQuery += " AND " + KEY_PARKING_AVAILABLE + " = " + (parkingAvailable ? 1 : 0);
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try (Cursor cursor = db.rawQuery(selectQuery, null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Hike hike = new Hike();
+                    hike.setId(cursor.getLong(0));
+                    hike.setName(cursor.getString(1));
+                    hike.setLocation(cursor.getString(2));
+                    hike.setDate(LocalDate.ofEpochDay(cursor.getLong(3)));
+                    hike.setParking_available(cursor.getInt(4) == 1);
+                    hike.setLength_km(cursor.getDouble(5));
+                    hike.setDifficulty(cursor.getString(6));
+                    hike.setDescription(cursor.getString(7));
+                    hikeList.add(hike);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error searching hikes", e);
+        }
+
+        return hikeList;
     }
 }
