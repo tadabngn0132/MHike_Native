@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_hikes, R.id.navigation_add_hike, R.id.navigation_profile)
+                R.id.navigation_home, R.id.navigation_hikes, R.id.navigation_add_hike, R.id.search_fragment, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_add_hike) {
                 navController.popBackStack(R.id.navigation_add_hike, false);
                 navController.navigate(R.id.navigation_add_hike);
+                return true;
+            }
+            else if (itemId == R.id.search_fragment) {
+                navController.popBackStack(R.id.search_fragment, false);
+                navController.navigate(R.id.search_fragment);
                 return true;
             } else if (itemId == R.id.navigation_profile) {
                 navController.popBackStack(R.id.navigation_profile, false);
