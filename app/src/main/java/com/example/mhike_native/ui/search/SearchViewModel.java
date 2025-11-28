@@ -3,20 +3,21 @@ package com.example.mhike_native.ui.search;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.mhike_native.helpers.DatabaseHelper;
 import com.example.mhike_native.models.Hike;
 
 import java.util.List;
 
-public class SearchViewModel extends ViewModel {
+public class SearchViewModel extends AndroidViewModel {
     private final DatabaseHelper databaseHelper;
     private final MutableLiveData<List<Hike>> hikesLiveData;
 
     public SearchViewModel(@NonNull Application application) {
+        super(application);
         databaseHelper = DatabaseHelper.getInstance(application);
         hikesLiveData = new MutableLiveData<>();
     }
@@ -28,7 +29,7 @@ public class SearchViewModel extends ViewModel {
     public void searchHikes(String nameKeyWord, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
         new Thread(() -> {
             List<Hike> hikes = databaseHelper.searchHikes(nameKeyWord, location, date, minLength, maxLength, difficulty, parkingAvailable);
-            hikesLiveData.setValue(hikes);
+            hikesLiveData.postValue(hikes);
         }).start();
     }
 }
