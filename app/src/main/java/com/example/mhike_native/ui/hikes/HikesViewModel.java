@@ -34,4 +34,11 @@ public class HikesViewModel extends AndroidViewModel {
             hikesLiveData.postValue(hikeList);
         }).start();
     }
+
+    public void deleteAllHikes() {
+        new Thread(() -> {
+            databaseHelper.deleteAllHikes();
+            loadAllHikes();
+        }).start();
+    }
 }

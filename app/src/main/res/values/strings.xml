@@ -44,4 +44,5 @@
     <string name="label_title_add_observation">Add New Observation</string>
     <string name="label_title_edit_observation">Update Observation</string>
     <string name="label_title_edit_hike">Update Hike</string>
+    <string name="delete_all_hikes">Delete All Hikes</string>
 </resources>

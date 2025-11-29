@@ -337,7 +337,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long deletedHikeId = -1;
         try {
             deletedHikeId = db.delete(TABLE_HIKES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
-            db.delete(TABLE_OBSERVATIONS, KEY_HIKE_ID + " = ?", new String[]{String.valueOf(id)});
         } catch (Exception e) {
             Log.e("DatabaseHelper", "Error deleting hike", e);
         }
@@ -361,6 +360,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return deletedObservationId;
+    }
+
+    public void deleteAllHikes() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.delete(TABLE_HIKES, null, null);
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error deleting all hikes", e);
+        }
     }
 
     public List<Hike> searchHikes(String name, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {

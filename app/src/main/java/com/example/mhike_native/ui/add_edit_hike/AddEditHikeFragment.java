@@ -19,6 +19,7 @@ import com.example.mhike_native.R;
 import com.example.mhike_native.databinding.FragmentAddEditHikeBinding;
 import com.example.mhike_native.models.Hike;
 import com.example.mhike_native.ui.hikes.HikesViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -120,14 +121,8 @@ public class AddEditHikeFragment extends Fragment {
         });
 
         // Set up button click listeners
-        binding.btnAdd.setOnClickListener(v -> onClickedAddHikeBtn());
+        binding.btnAdd.setOnClickListener(v -> displayAddHikeConfirmationDialog());
         binding.btnReset.setOnClickListener(v -> onClickedResetBtn());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private void onClickedAddHikeBtn() {
@@ -171,5 +166,26 @@ public class AddEditHikeFragment extends Fragment {
         binding.spinnerDifficulty.setSelection(0);
         binding.spinnerParkingAvailable.setSelection(0);
         binding.editTextDescription.setText("");
+    }
+
+    private void displayAddHikeConfirmationDialog() {
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(requireContext());
+        materialAlertDialogBuilder.setTitle("Confirm Hike Details");
+        materialAlertDialogBuilder.setMessage("Name" + binding.editTextHikeName.getText().toString() +
+            "\nLocation: " + binding.editTextLocation.getText().toString() +
+            "\nDate: " + binding.editTextDate.getText().toString() +
+            "\nLength: " + binding.editTextLength.getText().toString() +
+            "\nDifficulty: " + binding.spinnerDifficulty.getSelectedItem().toString() +
+            "\nParking Available: " + binding.spinnerParkingAvailable.getSelectedItem().toString() +
+            "\nDescription: " + binding.editTextDescription.getText().toString());
+        materialAlertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        materialAlertDialogBuilder.setPositiveButton("Confirm", (dialog, which) -> onClickedAddHikeBtn());
+        materialAlertDialogBuilder.show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
