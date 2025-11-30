@@ -26,7 +26,7 @@ public class SearchViewModel extends AndroidViewModel {
         return hikesLiveData;
     }
 
-    public void searchHikes(String nameKeyWord, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
+    public void searchHikes(String nameKeyWord, String location, String date, Double minLength, Double maxLength, String difficulty, Boolean parkingAvailable) {
         new Thread(() -> {
             List<Hike> hikes = databaseHelper.searchHikes(nameKeyWord, location, date, minLength, maxLength, difficulty, parkingAvailable);
             hikesLiveData.postValue(hikes);

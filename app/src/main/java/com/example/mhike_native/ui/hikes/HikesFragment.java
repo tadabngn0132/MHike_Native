@@ -39,7 +39,14 @@ public class HikesFragment extends Fragment implements HikeAdapter.OnHikeListene
         hikeAdapter.setOnClickedHikeListener(this);
         binding.recyclerViewHikes.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerViewHikes.setAdapter(hikeAdapter);
-        hikesViewModel.getHikes().observe(getViewLifecycleOwner(), hikeAdapter::setHikeList);
+        hikesViewModel.getHikes().observe(getViewLifecycleOwner(), hikes -> {
+            if (hikes.isEmpty()) {
+                binding.tvEmptyState.setVisibility(View.VISIBLE);
+            } else {
+                binding.tvEmptyState.setVisibility(View.GONE);
+            }
+            hikeAdapter.setHikeList(hikes);
+        });
         return root;
     }
 

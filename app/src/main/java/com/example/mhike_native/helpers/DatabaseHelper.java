@@ -371,7 +371,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Hike> searchHikes(String name, String location, String date, Integer minLength, Integer maxLength, String difficulty, Boolean parkingAvailable) {
+    public List<Hike> searchHikes(String name, String location, String date, Double minLength, Double maxLength, String difficulty, Boolean parkingAvailable) {
         List<Hike> hikeList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE 1=1";
 

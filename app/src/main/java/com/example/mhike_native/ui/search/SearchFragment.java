@@ -47,15 +47,51 @@ public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListen
         binding.searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                handleSearch();
                 binding.searchView.clearFocus();
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String newKeyWord) {
+                handleSearch();
                 return true;
             }
         });
+    }
+
+    private void handleSearch() {
+        String nameKeyWord = binding.searchView.getQuery().toString();
+        String location = binding.editTextSearchLocation.getText().toString();
+        String date = binding.editTextSearchDate.getText().toString();
+        double minLength = 0.0;
+        double maxLength = 0.0;
+        String difficulty = null;
+        Boolean parkingAvailable = null;
+
+        String minLengthStr = binding.editTextSearchMinLength.getText().toString();
+        if (!minLengthStr.isEmpty()) {
+            minLength = Double.parseDouble(minLengthStr);
+        }
+
+        String maxLengthStr = binding.editTextSearchMaxLength.getText().toString();
+        if (!maxLengthStr.isEmpty()) {
+            maxLength = Double.parseDouble(maxLengthStr);
+        }
+
+        int selectedDifficultyId = binding.rdgDifficulty.getCheckedRadioButtonId();
+        if (selectedDifficultyId != -1) {
+            TextView selectedDifficultyBtn = binding.rdgDifficulty.findViewById(selectedDifficultyId);
+            difficulty = selectedDifficultyBtn.getText().toString();
+        }
+
+        int selectedParkingId = binding.rdgParkingAvailable.getCheckedRadioButtonId();
+        if (selectedParkingId != -1) {
+            TextView selectedParkingBtn = binding.rdgParkingAvailable.findViewById(selectedParkingId);
+            parkingAvailable = selectedParkingBtn.getText().toString().equals("Yes");
+        }
+
+        searchViewModel.searchHikes(nameKeyWord, location, date, minLength, maxLength, difficulty, parkingAvailable);
     }
 
     @Override
