@@ -45,4 +45,6 @@
     <string name="label_title_edit_observation">Update Observation</string>
     <string name="label_title_edit_hike">Update Hike</string>
     <string name="delete_all_hikes">Delete All Hikes</string>
+    <string name="btn_apply_filter">Apply</string>
+    <string name="btn_clear_filter">Clear</string>
 </resources>

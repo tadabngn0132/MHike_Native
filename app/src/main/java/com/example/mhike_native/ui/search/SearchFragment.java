@@ -43,7 +43,6 @@ public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.btnClear.setOnClickListener(v -> onClearBtnClicked());
         binding.searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -58,14 +57,23 @@ public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListen
                 return true;
             }
         });
+        binding.btnFilter.setOnClickListener(v -> {
+            if (binding.cardViewFilter.getVisibility() == View.GONE) {
+                binding.cardViewFilter.setVisibility(View.VISIBLE);
+            } else {
+                binding.cardViewFilter.setVisibility(View.GONE);
+            }
+        });
+        binding.btnApply.setOnClickListener(v -> handleSearch());
+        binding.btnClear.setOnClickListener(v -> onClearBtnClicked());
     }
 
     private void handleSearch() {
         String nameKeyWord = binding.searchView.getQuery().toString();
         String location = binding.editTextSearchLocation.getText().toString();
         String date = binding.editTextSearchDate.getText().toString();
-        double minLength = 0.0;
-        double maxLength = 0.0;
+        Double minLength = null;
+        Double maxLength = null;
         String difficulty = null;
         Boolean parkingAvailable = null;
 
