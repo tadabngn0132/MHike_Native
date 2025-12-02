@@ -64,20 +64,24 @@
         android:id="@+id/search_fragment"
         android:name="com.example.mhike_native.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_fragment_to_hikeDetailsFragment"
+            app:destination="@id/hikeDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addEditObservationFragment"
         android:name="com.example.mhike_native.ui.add_edit_observation.AddEditObservationFragment"
-        android:label="fragment_add_edit_observation"
-        tools:layout="@layout/fragment_add_edit_observation" >
+        android:label="Add/Edit Obsevation"
+        tools:layout="@layout/fragment_add_edit_observation">
         <argument
             android:name="observationId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="hikeId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_addEditObservationFragment_to_hikeDetailsFragment"
             app:destination="@id/hikeDetailsFragment" />
@@ -85,18 +89,18 @@
     <fragment
         android:id="@+id/observationDetailsFragment"
         android:name="com.example.mhike_native.ui.observation_details.ObservationDetailsFragment"
-        android:label="fragment_observation_details"
-        tools:layout="@layout/fragment_observation_details" >
+        android:label="Observation Details"
+        tools:layout="@layout/fragment_observation_details">
         <action
             android:id="@+id/action_observationDetailsFragment_to_addEditObservationFragment"
             app:destination="@id/addEditObservationFragment" />
         <argument
             android:name="observationId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="hikeId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 </navigation>
