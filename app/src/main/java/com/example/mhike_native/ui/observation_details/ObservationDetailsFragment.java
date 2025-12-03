@@ -19,6 +19,8 @@ import com.example.mhike_native.databinding.FragmentObservationDetailsBinding;
 import com.example.mhike_native.models.Observation;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.time.format.DateTimeFormatter;
+
 public class ObservationDetailsFragment extends Fragment {
 
     private FragmentObservationDetailsBinding binding;
@@ -37,7 +39,7 @@ public class ObservationDetailsFragment extends Fragment {
 
         Observation observation = observationDetailsViewModel.getObservationById(observationId);
         binding.tvObservationDetailsName.setText(observation.getTitle());
-        binding.tvObservationDetailsTimestamp.setText(observation.getTimestamp().toString());
+        binding.tvObservationDetailsTimestamp.setText(observation.getTimestamp().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a")));
         binding.tvObservationDetailsComments.setText(observation.getComments());
 
         return root;
