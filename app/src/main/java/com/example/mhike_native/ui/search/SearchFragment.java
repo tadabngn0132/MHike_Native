@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,11 @@ public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListen
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        searchViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+        });
+
 
         HikeAdapter hikeAdapter = new HikeAdapter();
         hikeAdapter.setOnClickedHikeListener(this);

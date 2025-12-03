@@ -373,6 +373,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<Hike> searchHikes(String name, String location, LocalDate date, Double minLength, Double maxLength, String difficulty, Boolean parkingAvailable) {
         List<Hike> hikeList = new ArrayList<>();
+
+        if (name == null && location == null && date == null && minLength == null && maxLength == null && difficulty == null && parkingAvailable == null) {
+            return hikeList;
+        }
+        if (name != null && name.trim().isEmpty() && location != null && location.trim().isEmpty()) {
+            boolean allFiltersEmpty = name.trim().isEmpty() && location.trim().isEmpty() && date == null && minLength == null && maxLength == null && (difficulty == null || difficulty.trim().isEmpty()) && parkingAvailable == null;
+            if(allFiltersEmpty) return hikeList;
+        }
+
         String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE 1=1";
 
         if (name != null && !name.isEmpty()) {
