@@ -1,5 +1,7 @@
 package com.example.mhike_native.ui.add_edit_observation;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.TimePickerDialog;
@@ -55,11 +57,11 @@ public class AddEditObservationFragment extends Fragment {
         });
 
         if (observationId == -1) {
-            requireActivity().setTitle(R.string.label_title_add_observation);
+            setActionBarTitle(getString(R.string.label_title_add_observation));
             binding.btnAddObservation.setText(R.string.btn_add_observation);
             binding.btnResetObservationForm.setText(R.string.btn_reset);
         } else {
-            requireActivity().setTitle(R.string.label_title_edit_observation);
+            setActionBarTitle(getString(R.string.label_title_edit_observation));
             binding.btnAddObservation.setText(R.string.btn_update_hike);
             binding.btnResetObservationForm.setText(R.string.btn_cancel);
 
@@ -92,6 +94,15 @@ public class AddEditObservationFragment extends Fragment {
         addEditObservationViewModel.getTimestampErrMsg().observe(getViewLifecycleOwner(), timestampErrMsg -> binding.tvTimestampErr.setText(timestampErrMsg));
 
         return root;
+    }
+
+    private void setActionBarTitle(String labelTitleAddObservation) {
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(labelTitleAddObservation);
+            }
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -71,7 +72,7 @@ public class HikesFragment extends Fragment implements HikeAdapter.OnHikeListene
 
                 return false;
             }
-        });
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     @Override

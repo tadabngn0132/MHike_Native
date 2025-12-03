@@ -371,7 +371,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Hike> searchHikes(String name, String location, String date, Double minLength, Double maxLength, String difficulty, Boolean parkingAvailable) {
+    public List<Hike> searchHikes(String name, String location, LocalDate date, Double minLength, Double maxLength, String difficulty, Boolean parkingAvailable) {
         List<Hike> hikeList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_HIKES + " WHERE 1=1";
 
@@ -383,10 +383,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             selectQuery += " AND " + KEY_LOCATION + " LIKE '%" + location + "%'";
         }
 
-        if (date != null && !date.isEmpty()) {
-            LocalDate localDate = LocalDate.parse(date);
-            long epochDay = localDate.toEpochDay();
-            selectQuery += " AND " + KEY_DATE + " = " + epochDay;
+        if (date != null) {
+            selectQuery += " AND " + KEY_DATE + " = " + date.toEpochDay();
         }
 
         if (minLength != null) {

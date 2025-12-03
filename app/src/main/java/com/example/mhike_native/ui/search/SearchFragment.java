@@ -1,5 +1,6 @@
 package com.example.mhike_native.ui.search;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.mhike_native.R;
 import com.example.mhike_native.adapters.HikeAdapter;
 import com.example.mhike_native.databinding.FragmentSearchBinding;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListener {
 
@@ -42,6 +47,25 @@ public class SearchFragment extends Fragment implements HikeAdapter.OnHikeListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Calendar calendar = Calendar.getInstance();
+
+        binding.editTextSearchDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireContext(),
+                    (dateView, year, month, dayOfMonth) -> {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        binding.editTextSearchDate.setText(dateFormat.format(calendar.getTime()));
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.show();
+        });
 
         binding.searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
             @Override

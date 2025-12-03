@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_hikes">All Hikes</string>
     <string name="title_add_hike">Add</string>
-    <string name="label_title_add_hike">Add/Edit Hike</string>
+    <string name="label_title_add_hike">Add New Hike</string>
 
     <string name="title_search">Search</string>
 

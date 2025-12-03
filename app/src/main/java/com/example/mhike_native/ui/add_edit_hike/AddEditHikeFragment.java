@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -75,11 +77,11 @@ public class AddEditHikeFragment extends Fragment {
 
         hikeId = getArguments() != null ? getArguments().getLong("hikeId", -1) : -1;
         if (hikeId == -1) {
-            requireActivity().setTitle(R.string.label_title_add_hike);
+            setActionBarTitle(getString(R.string.label_title_add_hike));
             binding.btnAdd.setText(R.string.btn_add_hike);
             binding.btnReset.setText(R.string.btn_reset);
         } else {
-            requireActivity().setTitle(R.string.label_title_edit_hike);
+            setActionBarTitle(getString(R.string.label_title_edit_hike));
             binding.btnAdd.setText(R.string.btn_update_hike);
             binding.btnReset.setText(R.string.btn_cancel);
             Hike hike = addHikeViewModel.getHikeById(hikeId);
@@ -94,6 +96,15 @@ public class AddEditHikeFragment extends Fragment {
         }
 
         return root;
+    }
+
+    private void setActionBarTitle(String labelTitleAddHike) {
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(labelTitleAddHike);
+            }
+        }
     }
 
     @Override
